@@ -44,7 +44,7 @@ Video Link:
 <h2> Summary </h2>
 <br>
 
-<p> Step: 1 - We import pandas and numpy for data loading and data preprocessing, matplotlib for visualization, train_test_split from scikit learn for training and testing data, svm, KNN Classifiers for prediction. </p>
+<p> Welcome to Classification Central, where any new Machine Learning Enthusiast can learn about the basic algorithms. Explore our options and learn step by step about classification and regression solutions to different datasets.</p>
 
 
 
