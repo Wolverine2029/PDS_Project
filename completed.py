@@ -66,12 +66,12 @@ df = pd.read_csv("/Users/allyryan/Downloads/data.csv")
 
 
 if selected == "Logistic Regression":
-    Logistic_Regression = st.selectbox('Logistic Regression: Select one option:', ['', 'Summary of my Data', 'Replace Classifier With 0 and 1', 'Check for Null Values in the data', 'Create and fit models to test and training data', 'Accuracy Score', 'Confusion Matrix'], format_func=lambda x: 'Select an option' if x == '' else x)
+    Logistic_Regression = st.selectbox('Logistic Regression: Select one option:', ['', 'Step 1: Check for Null Values','Step 2: Summarize Data', 'Step 3: Replace Classifier With 0 and 1', 'Step 4: Implement Test and Training Sets', 'Step 5: Accuracy Score', 'Step 6: Confusion Matrix'], format_func=lambda x: 'Select an option' if x == '' else x)
 #if Logistic_Regression:
     #st.success('Yay! 🎉')
 #else:
     #st.warning('No option is selected')
-    if Logistic_Regression == 'Check for Null Values in the data':
+    if Logistic_Regression == 'Step 1: Check for Null Values':
         st.markdown("# Null Values Part 1")
         st.markdown("""
                     Part 1 is to determine if there are any null values in the data.
@@ -102,7 +102,7 @@ if selected == "Logistic Regression":
                 You have completed Logistic Regression, Null Values!!!
                 You are ready to move on to the 'Summary of my Data' step!!!
                 """)
-    if Logistic_Regression == 'Summary of my Data':
+    if Logistic_Regression == 'Step 2: Summarize Data':
         df = df.drop('Unnamed: 32', axis=1)
         st.markdown("# Summarize Data")
         st.markdown("""
@@ -119,12 +119,12 @@ if selected == "Logistic Regression":
                     You have completed Logistic Regression, Summarize Data!!!
                     You are ready to move on to the 'Replace Classifier With 0 and 1' step!!!
                     """)
-    if Logistic_Regression == 'Replace Classifier With 0 and 1':
+    if Logistic_Regression == 'Step 3: Replace Classifier With 0 and 1':
         df = df.drop('Unnamed: 32', axis=1)
         st.markdown("# Replace Classifier Part 1")
         st.markdown("""
                     Binary classification uses 0's and 1's to perform the classification analysis.  
-                    0 represents the negative value and 1 represents the positive value.  A majority of datasets
+                    0 represents the positive value and 1 represents the negative value.  A majority of datasets
                     are going to contain the qualitative classifier instead of the 0 and 1 values.  As such, when
                     performing classification, it is necessary to write a code that will replace the classifiers
                     in the dataset.    
@@ -196,7 +196,7 @@ if selected == "Logistic Regression":
                        You have completed Logistic Regression, Replace Classifier!!!
                        You are ready to move on to the 'Test and Training Data' step!!!
                        """)
-    if Logistic_Regression ==  'Create and fit models to test and training data':
+    if Logistic_Regression ==  'Step 4: Implement Test and Training Sets':
         df.isnull().any()
         df = df.drop('Unnamed: 32', axis=1)
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
@@ -283,7 +283,7 @@ if selected == "Logistic Regression":
                     You have completed Logistic Regression, Test and Training Data!!!
                     You are ready to move on to the 'Accuracy Score' step!!!
                     """)
-    if Logistic_Regression == 'Accuracy Score':
+    if Logistic_Regression == 'Step 5: Accuracy Score':
         df = df.drop('Unnamed: 32', axis=1)
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
         X = df.drop(['id', 'diagnosis'], axis=1)
@@ -322,7 +322,7 @@ if selected == "Logistic Regression":
                     You have completed Logistic Regression, Accuracy Score!!!
                     You are ready to move on to the 'Confusion Matrix' step!!!
                     """)
-    if Logistic_Regression == 'Confusion Matrix':
+    if Logistic_Regression == 'Step 6: Confusion Matrix':
         df = df.drop('Unnamed: 32', axis=1)
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
         X = df.drop(['id', 'diagnosis'], axis=1)
@@ -330,19 +330,46 @@ if selected == "Logistic Regression":
         xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8, random_state =20221023)
         regressionModel = LogisticRegression(solver='newton-cg')
         regressionModel.fit(xTrain, yTrain)
-        regressionModel.score(xTrain, yTrain)
         predRegression = regressionModel.predict(xTest)
+        if st.button('Click for Part 1 Code'):
+            st.write(""""
+            plt.figure(figsize=(16, 14))
+            plt.subplot(3, 3, 1)
+            sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predRegression), annot=True).set(title='Logistic Regression')
+            plt.show()
+            """)
         plt.figure(figsize=(16, 14))
         plt.subplot(3, 3, 1)
         sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predRegression), annot=True).set(title='Logistic Regression')
         st.set_option('deprecation.showPyplotGlobalUse', False)
         st.pyplot(plt.show())
         predVals = pd.DataFrame(data={'truth': yTest, 'regression': predRegression})
+        if st.button("Part 1 Explanation"):
+            st.write("""
+                    The top left value represents the true positive classifications.  This means you predicted positive and it's 
+                    true.  In the case of our dataset, you predicted that a tumor is malignant and it actually is. 
+                    
+                    The top right value represents the false positive classifications.  This is also known as a Type I error.
+                    This means you predicted positive and it's false. In the case of our dataset, you predicted that a tumor is malignant
+                    but it is actually benign.
+                      
+                    The bottom left value represents the false negative classifications.  This is also known as a Type I error. 
+                    This means you predicted negative and it's false.  In the case of our dataset, you predicted
+                    that a tumor is benign but it is actually malignant.  
+                     
+                    The bottom right value represents the true negative classifications.This means you predicted negative
+                    and it's true.  In the case of our dataset, you predicted that a tumor is benign and it is indeed benign.   
+                    """)
+        st.markdown("# Congrats 🎉!!!")
+        st.markdown(""" 
+                    You have completed Logistic Regression, Confusion Matrix!!!
+                    You are now a Logistic Regression classification pro and ready to classify your own dataset!!!
+                    """)
 
 
 if selected == "KNN":
-    KNN = st.selectbox('KNN: Select one option:', ['', 'Summary of my Data', 'Replace Classifier With 0 and 1', 'Check for Null Values in the data', 'Create and fit models to test and training data', 'Accuracy Score', 'Confusion Matrix'], format_func=lambda x: 'Select an option' if x == '' else x)
-    if KNN == 'Check for Null Values in the data':
+    KNN = st.selectbox('KNN: Select one option:', ['', 'Step 1: Check for Null Values','Step 2: Summarize Data', 'Step 3: Replace Classifier With 0 and 1', 'Step 4: Implement Test and Training Sets', 'Step 5: Accuracy Score', 'Step 6: Confusion Matrix'], format_func=lambda x: 'Select an option' if x == '' else x)
+    if KNN == 'Step 1: Check for Null Values':
         st.markdown("# Null Values Part 1")
         st.markdown("""
                     Part 1 is to determine if there are any null values in the data.
@@ -373,7 +400,7 @@ if selected == "KNN":
                     You have completed KNN, Null Values!!!
                     You are ready to move on to the 'Summary of my Data' step!!!
                     """)
-    if KNN == 'Summary of my Data':
+    if KNN == 'Step 2: Summarize Data':
         df = df.drop('Unnamed: 32', axis=1)
         st.markdown("# Summarize Data")
         st.markdown("""
@@ -390,12 +417,12 @@ if selected == "KNN":
                     You have completed KNN, Summarize Data!!!
                     You are ready to move on to the 'Replace Classifier With 0 and 1' step!!!
                     """)
-    if KNN == 'Replace Classifier With 0 and 1':
+    if KNN == 'Step 3: Replace Classifier With 0 and 1':
         df = df.drop('Unnamed: 32', axis=1)
         st.markdown("# Replace Classifier Part 1")
         st.markdown("""
                     Binary classification uses 0's and 1's to perform the classification analysis.  
-                    0 represents the negative value and 1 represents the positive value.  A majority of datasets
+                    0 represents the positive value and 1 represents the negative value.  A majority of datasets
                     are going to contain the qualitative classifier instead of the 0 and 1 values.  As such, when
                     performing classification, it is necessary to write a code that will replace the classifiers
                     in the dataset.    
@@ -467,7 +494,7 @@ if selected == "KNN":
                     You have completed KNN, Replace Classifier!!!
                     You are ready to move on to the 'Test and Training Data' step!!!
                     """)
-    if KNN ==  'Create and fit models to test and training data':
+    if KNN ==  'Step 4: Implement Test and Training Sets':
         df.isnull().any()
         df = df.drop('Unnamed: 32', axis=1)
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
@@ -562,7 +589,7 @@ if selected == "KNN":
                     You have completed KNN, Test and Training Data!!!
                     You are ready to move on to the 'Accuracy Score' step!!!
                     """)
-    if KNN == 'Accuracy Score':
+    if KNN == 'Step 5: Accuracy Score':
         df = df.drop('Unnamed: 32', axis=1)
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
         X = df.drop(['id', 'diagnosis'], axis=1)
@@ -601,7 +628,7 @@ if selected == "KNN":
                     You have completed KNN, Accuracy Score!!!
                     You are ready to move on to the 'Confusion Matrix' step!!!
                     """)
-    if KNN == 'Confusion Matrix':
+    if KNN == 'Step 6: Confusion Matrix':
         df = df.drop('Unnamed: 32', axis=1)
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
         X = df.drop(['id', 'diagnosis'], axis=1)
@@ -610,17 +637,46 @@ if selected == "KNN":
         KNNModel = KNeighborsClassifier(n_neighbors=5, leaf_size=1, weights='uniform')
         KNNModel.fit(xTrain, yTrain)
         predKNN = KNNModel.predict(xTest)
+        if st.button('Click for Part 1 Code'):
+            st.write(""""
+                    plt.figure(figsize=(16, 14))
+                    plt.subplot(3, 3, 2)
+                    sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predKNN), annot=True).set(title= 'KNN')
+                    plt.show()
+                    """)
         plt.figure(figsize=(16, 14))
         plt.subplot(3, 3, 2)
-        sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predKNN), annot=True).set(title= 'KNN')
+        sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predKNN), annot=True).set(title='KNN')
         st.set_option('deprecation.showPyplotGlobalUse', False)
         st.pyplot(plt.show())
-        predVals = pd.DataFrame(data={'truth': yTest, 'KNN': predKNN})
+        if st.button("Part 1 Explanation"):
+            st.write("""
+                    The top left value represents the true positive classifications.  This means you predicted positive and it's 
+                    true.  In the case of our dataset, you predicted that a tumor is malignant and it actually is. 
+
+                    The top right value represents the false positive classifications.  This is also known as a Type I error.
+                    This means you predicted positive and it's false. In the case of our dataset, you predicted that a tumor is malignant
+                    but it is actually benign.
+
+                    The bottom left value represents the false negative classifications.  This is also known as a Type I error. 
+                    This means you predicted negative and it's false.  In the case of our dataset, you predicted
+                    that a tumor is benign but it is actually malignant.  
+
+                    The bottom right value represents the true negative classifications.This means you predicted negative
+                    and it's true.  In the case of our dataset, you predicted that a tumor is benign and it is indeed benign.   
+                    """)
+        st.markdown("# Congrats 🎉!!!")
+        st.markdown(""" 
+                    You have completed KNN, Confusion Matrix!!!
+                    You are now a KNN classification pro and ready to classify your own dataset!!!
+                    """)
+
+
 
 
 if selected == "Random Forest":
-    Random_Forest = st.selectbox('Random Forest: Select one option:', ['', 'Summary of my Data', 'Replace Classifier With 0 and 1', 'Check for Null Values in the data', 'Create and fit models to test and training data', 'Accuracy Score', 'Confusion Matrix'], format_func=lambda x: 'Select an option' if x == '' else x)
-    if Random_Forest == 'Check for Null Values in the data':
+    Random_Forest = st.selectbox('Random Forest: Select one option:', ['', 'Step 1: Check for Null Values','Step 2: Summarize Data', 'Step 3: Replace Classifier With 0 and 1', 'Step 4: Implement Test and Training Sets', 'Step 5: Accuracy Score', 'Step 6: Confusion Matrix'], format_func=lambda x: 'Select an option' if x == '' else x)
+    if Random_Forest == 'Step 1: Check for Null Values':
         st.markdown("# Null Values Part 1")
         st.markdown("""
                     Part 1 is to determine if there are any null values in the data.
@@ -651,7 +707,7 @@ if selected == "Random Forest":
                     You have completed Random Forest, Null Values!!!
                     You are ready to move on to the 'Summary of my Data' step!!!
                     """)
-    if Random_Forest == 'Summary of my Data':
+    if Random_Forest == 'Step 2: Summarize Data':
         df = df.drop('Unnamed: 32', axis=1)
         st.markdown("# Summarize Data")
         st.markdown("""
@@ -668,12 +724,12 @@ if selected == "Random Forest":
                     You have completed Random Forest, Summarize Data!!!
                     You are ready to move on to the 'Replace Classifier With 0 and 1' step!!!
                     """)
-    if Random_Forest == 'Replace Classifier With 0 and 1':
+    if Random_Forest == 'Step 3: Replace Classifier With 0 and 1':
         df = df.drop('Unnamed: 32', axis=1)
         st.markdown("# Replace Classifier Part 1")
         st.markdown("""
                     Binary classification uses 0's and 1's to perform the classification analysis.  
-                    0 represents the negative value and 1 represents the positive value.  A majority of datasets
+                    0 represents the positive value and 1 represents the negative value.  A majority of datasets
                     are going to contain the qualitative classifier instead of the 0 and 1 values.  As such, when
                     performing classification, it is necessary to write a code that will replace the classifiers
                     in the dataset.    
@@ -745,7 +801,7 @@ if selected == "Random Forest":
                     You have completed Random Forest, Replace Classifier!!!
                     You are ready to move on to the 'Test and Training Data' step!!!
                     """)
-    if Random_Forest ==  'Create and fit models to test and training data':
+    if Random_Forest ==  'Step 4: Implement Test and Training Sets':
         df.isnull().any()
         df = df.drop('Unnamed: 32', axis=1)
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
@@ -832,7 +888,7 @@ if selected == "Random Forest":
                     You have completed Random Forest, Test and Training Data!!!
                     You are ready to move on to the 'Accuracy Score' step!!!
                     """)
-    if Random_Forest == 'Accuracy Score':
+    if Random_Forest == 'Step 5: Accuracy Score':
         df = df.drop('Unnamed: 32', axis=1)
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
         X = df.drop(['id', 'diagnosis'], axis=1)
@@ -872,7 +928,7 @@ if selected == "Random Forest":
                     You have completed Random Forest, Accuracy Score!!!
                     You are ready to move on to the 'Confusion Matrix' step!!!
                     """)
-    if Random_Forest == 'Confusion Matrix':
+    if Random_Forest == 'Step 6: Confusion Matrix':
         df = df.drop('Unnamed: 32', axis=1)
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
         X = df.drop(['id', 'diagnosis'], axis=1)
@@ -880,18 +936,45 @@ if selected == "Random Forest":
         xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8, random_state=20221023)
         randomFModel = RandomForestClassifier()
         randomFModel.fit(xTrain, yTrain)
-        randomFModel.score(xTrain, yTrain)
         predRandomF = randomFModel.predict(xTest)
+        if st.button('Click for Part 1 Code'):
+            st.write(""""
+                    plt.figure(figsize=(16, 14))
+                    plt.subplot(3, 3, 3)
+                    sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predRandomF), annot=True).set(title='Random Forest')
+                    plt.show()
+                    """)
         plt.figure(figsize=(16, 14))
         plt.subplot(3, 3, 3)
         sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predRandomF), annot=True).set(title='Random Forest')
         st.set_option('deprecation.showPyplotGlobalUse', False)
         st.pyplot(plt.show())
-        predVals = pd.DataFrame(data={'truth': yTest, 'KNN': predRandomF})
+        if st.button("Part 1 Explanation"):
+            st.write("""
+                    The top left value represents the true positive classifications.  This means you predicted positive and it's 
+                    true.  In the case of our dataset, you predicted that a tumor is malignant and it actually is. 
+
+                    The top right value represents the false positive classifications.  This is also known as a Type I error.
+                    This means you predicted positive and it's false. In the case of our dataset, you predicted that a tumor is malignant
+                    but it is actually benign.
+
+                    The bottom left value represents the false negative classifications.  This is also known as a Type I error. 
+                    This means you predicted negative and it's false.  In the case of our dataset, you predicted
+                    that a tumor is benign but it is actually malignant.  
+
+                    The bottom right value represents the true negative classifications.This means you predicted negative
+                    and it's true.  In the case of our dataset, you predicted that a tumor is benign and it is indeed benign.   
+                    """)
+        st.markdown("# Congrats 🎉!!!")
+        st.markdown(""" 
+                    You have completed Random Forest, Confusion Matrix!!!
+                    You are now a Random Forest classification pro and ready to classify your own dataset!!!
+                    """)
+
 
 if selected == "Naive Bayes":
-    Naive_Bayes = st.selectbox('Naive Bayes: Select one option:', ['', 'Summary of my Data', 'Replace Classifier With 0 and 1', 'Check for Null Values in the data', 'Create and fit models to test and training data', 'Accuracy Score', 'Confusion Matrix'], format_func=lambda x: 'Select an option' if x == '' else x)
-    if Naive_Bayes == 'Check for Null Values in the data':
+    Naive_Bayes = st.selectbox('Naive Bayes: Select one option:', ['', 'Step 1: Check for Null Values','Step 2: Summarize Data', 'Step 3: Replace Classifier With 0 and 1', 'Step 4: Implement Test and Training Sets', 'Step 5: Accuracy Score', 'Step 6: Confusion Matrix'], format_func=lambda x: 'Select an option' if x == '' else x)
+    if Naive_Bayes == 'Step 1: Check for Null Values':
         st.markdown("# Null Values Part 1")
         st.markdown("""
                     Part 1 is to determine if there are any null values in the data.
@@ -922,7 +1005,7 @@ if selected == "Naive Bayes":
                     You have completed Naive Bayes, Null Values!!!
                     You are ready to move on to the 'Summary of my Data' step!!!
                     """)
-    if Naive_Bayes == 'Summary of my Data':
+    if Naive_Bayes == 'Step 2: Summarize Data':
         df = df.drop('Unnamed: 32', axis=1)
         st.markdown("# Summarize Data")
         st.markdown("""
@@ -939,12 +1022,12 @@ if selected == "Naive Bayes":
                     You have completed Naive Bayes, Summarize Data!!!
                     You are ready to move on to the 'Replace Classifier With 0 and 1' step!!!
                     """)
-    if Naive_Bayes == 'Replace Classifier With 0 and 1':
+    if Naive_Bayes == 'Step 3: Replace Classifier With 0 and 1':
         df = df.drop('Unnamed: 32', axis=1)
         st.markdown("# Replace Classifier Part 1")
         st.markdown("""
                     Binary classification uses 0's and 1's to perform the classification analysis.  
-                    0 represents the negative value and 1 represents the positive value.  A majority of datasets
+                    0 represents the positive value and 1 represents the negative value.  A majority of datasets
                     are going to contain the qualitative classifier instead of the 0 and 1 values.  As such, when
                     performing classification, it is necessary to write a code that will replace the classifiers
                     in the dataset.    
@@ -1016,8 +1099,7 @@ if selected == "Naive Bayes":
                     You have completed Naive Bayes, Replace Classifier!!!
                     You are ready to move on to the 'Test and Training Data' step!!!
                     """)
-    if Naive_Bayes ==  'Create and fit models to test and training data':
-        ##
+    if Naive_Bayes ==  'Step 4: Implement Test and Training Sets':
         df.isnull().any()
         df = df.drop('Unnamed: 32', axis=1)
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
@@ -1104,7 +1186,7 @@ if selected == "Naive Bayes":
                     You have completed Naive Bayes, Test and Training Data!!!
                     You are ready to move on to the 'Accuracy Score' step!!!
                     """)
-    if Naive_Bayes == 'Accuracy Score':
+    if Naive_Bayes == 'Step 5: Accuracy Score':
         df = df.drop('Unnamed: 32', axis=1)
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
         X = df.drop(['id', 'diagnosis'], axis=1)
@@ -1143,7 +1225,7 @@ if selected == "Naive Bayes":
                     You have completed Naive Bayes, Accuracy Score!!!
                     You are ready to move on to the 'Confusion Matrix' step!!!
                     """)
-    if Naive_Bayes == 'Confusion Matrix':
+    if Naive_Bayes == 'Step 6: Confusion Matrix':
         df = df.drop('Unnamed: 32', axis=1)
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
         X = df.drop(['id', 'diagnosis'], axis=1)
@@ -1152,12 +1234,45 @@ if selected == "Naive Bayes":
         NB = GaussianNB()
         NB.fit(xTrain, yTrain)
         predNB = NB.predict(xTest)
+        if st.button('Click for Part 1 Code'):
+            st.write("""
+                    plt.figure(figsize=(16, 14))
+                    """)
+            st.write("""
+                    plt.subplot(3, 3, 3)
+                    """)
+            st.write("""
+                    sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predNB), annot=True).set(title='Naive Bayes')
+                    """)
+            st.write("""
+                    plt.show()
+                    """)
         plt.figure(figsize=(16, 14))
         plt.subplot(3, 3, 3)
         sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predNB), annot=True).set(title='Naive Bayes')
         st.set_option('deprecation.showPyplotGlobalUse', False)
         st.pyplot(plt.show())
-        predVals = pd.DataFrame(data={'truth': yTest, 'KNN': predNB})
+        if st.button("Part 1 Explanation"):
+            st.write("""
+                    The top left value represents the true positive classifications.  This means you predicted positive and it's 
+                    true.  In the case of our dataset, you predicted that a tumor is malignant and it actually is. 
+
+                    The top right value represents the false positive classifications.  This is also known as a Type I error.
+                    This means you predicted positive and it's false. In the case of our dataset, you predicted that a tumor is malignant
+                    but it is actually benign.
+
+                    The bottom left value represents the false negative classifications.  This is also known as a Type I error. 
+                    This means you predicted negative and it's false.  In the case of our dataset, you predicted
+                    that a tumor is benign but it is actually malignant.  
+
+                    The bottom right value represents the true negative classifications.This means you predicted negative
+                    and it's true.  In the case of our dataset, you predicted that a tumor is benign and it is indeed benign.   
+                    """)
+        st.markdown("# Congrats 🎉!!!")
+        st.markdown(""" 
+                    You have completed Naive Bayes, Confusion Matrix!!!
+                    You are now a Naive Bayes classification pro and ready to classify your own dataset!!!
+                    """)
 
 if selected == "About":
     st.markdown("# Meet the Classification Central Developers!")
@@ -1203,32 +1318,34 @@ if selected == "Home":
     st.markdown("# The following are summaries of the classification techniques covered by Classification Central:")
     st.markdown("""
         
-                    """)
+                """)
     st.markdown("# Logistic Regression")
     st.markdown("""
-                    Enter Log Regression Summary Here
-                    """)
+                Enter Log Regression Summary Here
+                """)
     st.markdown("""
 
-                    """)
+                """)
     st.markdown("# KNN")
     st.markdown("""
-                    Enter KNN Summary Here
-                    """)
+                Enter KNN Summary Here
+                """)
     st.markdown("""
 
-                    """)
+                """)
     st.markdown("# Random Forest")
     st.markdown("""
-                    Enter Random Forest Summary Here
-                    """)
+                Enter Random Forest Summary Here
+                """)
     st.markdown("""
 
-                    """)
+                """)
     st.markdown("# Naive Bayes")
     st.markdown("""
-                    Enter Naive Bayes Summary Here
-                    """)
+                Enter Naive Bayes Summary Here
+                """)
+
+
 
 
 
