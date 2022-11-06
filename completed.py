@@ -1,3 +1,4 @@
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -10,7 +11,13 @@ from sklearn.metrics import accuracy_score
 import streamlit as st
 from streamlit_option_menu import option_menu
 import numpy as np
-from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
+# from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
+import matplotlib
+matplotlib.use('TkAgg')
+from streamlit_option_menu import option_menu
+from streamlit_pandas_profiling import st_profile_report
+import plotly.express as px
+import functions
 
 EXAMPLE_NO = 3
 
@@ -18,7 +25,7 @@ def streamlit_menu(example=3):
     if example == 3:
         selected = option_menu(
             menu_title=None,  # required
-            options=["Home", "Logistic Regression", "KNN", "Random Forest", "Naive Bayes", "About"],
+            options=["Home", "Logistic Regression", "KNN", "Random Forest", "Naive Bayes", "Interactive Visualisations w/o Modelling", "About"],
             icons=["house", "hourglass-split", "hourglass-split", "hourglass-split", "hourglass-split", "people-fill"],
             menu_icon="cast",  # optional
             default_index=0,  # optional
@@ -50,16 +57,23 @@ if selected == "Random Forest":
     st.title(f"{selected}")
 if selected == "Naive Bayes":
     st.title(f"{selected}")
+if selected == "Interactive Visualisations w/o Modelling":
+    st.title(f"{selected}")
 if selected == "About":
     st.title(f"{selected}")
 if selected == "Contact":
     st.title(f"{selected}")
 
-#insert file path name here
-df = pd.read_csv("/Users/allyryan/Downloads/data.csv")
+# insert file path name here
+df = pd.read_csv("C:/Users/NABILA HASHIM/OneDrive/Desktop/UMKC/PRINCIPLES OF DATA SCIENCE/Project/data.csv")
 
 if selected == "Logistic Regression":
-    Logistic_Regression = st.selectbox('Logistic Regression: Select one option:', ['', 'Step 1: Check for Null Values','Step 2: Summarize Data', 'Step 3: Replace Classifier With 0 and 1', 'Step 4: Implement Test and Training Sets', 'Step 5: Accuracy Score', 'Step 6: Confusion Matrix'], format_func=lambda x: 'Select an option' if x == '' else x)
+    Logistic_Regression = st.selectbox('Logistic Regression: Select one option:',
+                                       ['', 'Step 1: Check for Null Values', 'Step 2: Summarize Data',
+                                        'Step 3: Replace Classifier With 0 and 1',
+                                        'Step 4: Implement Test and Training Sets', 'Step 5: Accuracy Score',
+                                        'Step 6: Confusion Matrix'],
+                                       format_func=lambda x: 'Select an option' if x == '' else x)
     if Logistic_Regression == 'Step 1: Check for Null Values':
         st.markdown("# Null Values Part 1")
         st.markdown("""
@@ -163,7 +177,7 @@ if selected == "Logistic Regression":
                     We can see that there are 212 Benign (1) tumors and 357 Malignant (0) 
                     tumors in the breast cancer dataset.  This is an acceptable representation of 
                     both classifiers, thus we can proceed with this dataset. 
-            
+
                     Remember, if you are performing classification analysis on a different dataset, 
                     insert your classifier column name into the Part 3 code above. 
                     """)
@@ -182,7 +196,6 @@ if selected == "Logistic Regression":
             st.write("""
                     We can see that there is a good representation of both classifiers, where 0=malignant
                     and 1=benign. 
-
                     Remember, if you are performing classification analysis on a different dataset, 
                     insert your classifier column name into the Part 4 code above. 
                     """)
@@ -193,7 +206,7 @@ if selected == "Logistic Regression":
                        You have completed Logistic Regression, Replace Classifier!!!
                        You are ready to move on to the 'Test and Training Data' step!!!
                        """)
-    if Logistic_Regression ==  'Step 4: Implement Test and Training Sets':
+    if Logistic_Regression == 'Step 4: Implement Test and Training Sets':
         df.isnull().any()
         df = df.drop('Unnamed: 32', axis=1)
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
@@ -207,9 +220,9 @@ if selected == "Logistic Regression":
             st.write("""
                     Since the diagnosis column contains the classifiers, we want to remove this column from the X variable.  We 
                     won't neglect the diagnosis column for long, however, as we will utilize these values for the y variable!
-            
+
                     We remove the id column as it is just an identifier, and does not play a role in tumor classification.  
-            
+
                     If working with your own dataset, make sure you remove the irrelevant columns pertaining to your dataset!
                     """)
         X = df.drop(['id', 'diagnosis'], axis=1)
@@ -222,7 +235,6 @@ if selected == "Logistic Regression":
         if st.button('Part 2 Explanation'):
             st.write("""
                     Since the diagnosis column contains the classifiers, we consider this the dependent variable column.  
-
                     If working with your own dataset, make sure you do some research on indexes so that you can accurately 
                     store your classifier column!
                     """)
@@ -232,20 +244,22 @@ if selected == "Logistic Regression":
                     Part 3 splits the data into test and training sets using the X and Y variables we created previously.       
                     """)
         if st.button('Click for Part 3 Code'):
-            st.write("xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8, random_state =20221023)")
-        xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8, random_state =20221023)
+            st.write(
+                "xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8, random_state =20221023)")
+        xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8,
+                                                                                random_state=20221023)
         if st.button('Part 3 Explanation'):
             st.write("""
                     Part 3 will not return any output, but will instead assign data to variables that will return output later on 
                     in the classification process. 
-            
+
                     You train the model using the training set, and test the model using the testing set. Training the model means to 
                     create the model, whereas testing the model means to test the accuracy of the model.  Training and testing sets
                     are created for both the X and Y variables.  
-            
+
                     It is common to split the test and training sets by 20/80 percent, however, you should do some research on what is 
                     best for your model!  
-            
+
                     The random_state number sets the seed so that you calculate the same accuracy each time.  Any number can be used, 
                     but many people prefer to use today's date.
                     """)
@@ -285,7 +299,8 @@ if selected == "Logistic Regression":
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
         X = df.drop(['id', 'diagnosis'], axis=1)
         Y = df.iloc[:, 1]
-        xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8, random_state =20221023)
+        xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8,
+                                                                                random_state=20221023)
         regressionModel = LogisticRegression(solver='newton-cg')
         regressionModel.fit(xTrain, yTrain)
         predRegression = regressionModel.predict(xTest)
@@ -324,18 +339,21 @@ if selected == "Logistic Regression":
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
         X = df.drop(['id', 'diagnosis'], axis=1)
         Y = df.iloc[:, 1]
-        xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8, random_state =20221023)
+        xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8,
+                                                                                random_state=20221023)
         regressionModel = LogisticRegression(solver='newton-cg')
         regressionModel.fit(xTrain, yTrain)
         predRegression = regressionModel.predict(xTest)
         if st.button('Click for Part 1 Code'):
             st.write("""plt.figure(figsize=(16, 14))""")
             st.write("""plt.subplot(3, 3, 1)""")
-            st.write("""sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predRegression), annot=True).set(title='Logistic Regression')""")
+            st.write(
+                """sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predRegression), annot=True).set(title='Logistic Regression')""")
             st.write("""plt.show()""")
         plt.figure(figsize=(16, 14))
         plt.subplot(3, 3, 1)
-        sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predRegression), annot=True).set(title='Logistic Regression')
+        sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predRegression), annot=True).set(
+            title='Logistic Regression')
         st.set_option('deprecation.showPyplotGlobalUse', False)
         st.pyplot(plt.show())
         predVals = pd.DataFrame(data={'truth': yTest, 'regression': predRegression})
@@ -343,15 +361,15 @@ if selected == "Logistic Regression":
             st.write("""
                     The top left value represents the true positive classifications.  This means you predicted positive and it's 
                     true.  In the case of our dataset, you predicted that a tumor is malignant and it actually is. 
-                    
+
                     The top right value represents the false positive classifications.  This is also known as a Type I error.
                     This means you predicted positive and it's false. In the case of our dataset, you predicted that a tumor is malignant
                     but it is actually benign.
-                      
+
                     The bottom left value represents the false negative classifications.  This is also known as a Type II error. 
                     This means you predicted negative and it's false.  In the case of our dataset, you predicted
                     that a tumor is benign but it is actually malignant.  
-                     
+
                     The bottom right value represents the true negative classifications.This means you predicted negative
                     and it's true.  In the case of our dataset, you predicted that a tumor is benign and it is indeed benign.   
                     """)
@@ -361,9 +379,12 @@ if selected == "Logistic Regression":
                     You are now a Logistic Regression classification pro and ready to classify your own dataset!!!
                     """)
 
-
 if selected == "KNN":
-    KNN = st.selectbox('KNN: Select one option:', ['', 'Step 1: Check for Null Values','Step 2: Summarize Data', 'Step 3: Replace Classifier With 0 and 1', 'Step 4: Implement Test and Training Sets', 'Step 5: Accuracy Score', 'Step 6: Confusion Matrix'], format_func=lambda x: 'Select an option' if x == '' else x)
+    KNN = st.selectbox('KNN: Select one option:', ['', 'Step 1: Check for Null Values', 'Step 2: Summarize Data',
+                                                   'Step 3: Replace Classifier With 0 and 1',
+                                                   'Step 4: Implement Test and Training Sets', 'Step 5: Accuracy Score',
+                                                   'Step 6: Confusion Matrix'],
+                       format_func=lambda x: 'Select an option' if x == '' else x)
     if KNN == 'Step 1: Check for Null Values':
         st.markdown("# Null Values Part 1")
         st.markdown("""
@@ -467,7 +488,6 @@ if selected == "KNN":
                     We can see that there are 212 Benign (1) tumors and 357 Malignant (0) 
                     tumors in the breast cancer dataset.  This is an acceptable representation of 
                     both classifiers, thus we can proceed with this dataset. 
-
                     Remember, if you are performing classification analysis on a different dataset, 
                     insert your classifier column name into the Part 3 code above. 
                     """)
@@ -486,7 +506,6 @@ if selected == "KNN":
             st.write("""
                     We can see that there is a good representation of both classifiers, where 0=malignant
                     and 1=benign. 
-
                     Remember, if you are performing classification analysis on a different dataset, 
                     insert your classifier column name into the Part 4 code above. 
                     """)
@@ -497,7 +516,7 @@ if selected == "KNN":
                     You have completed KNN, Replace Classifier!!!
                     You are ready to move on to the 'Test and Training Data' step!!!
                     """)
-    if KNN ==  'Step 4: Implement Test and Training Sets':
+    if KNN == 'Step 4: Implement Test and Training Sets':
         df.isnull().any()
         df = df.drop('Unnamed: 32', axis=1)
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
@@ -511,9 +530,7 @@ if selected == "KNN":
             st.write("""
                    Since the diagnosis column contains the classifiers, we want to remove this column from the X variable.  We 
                    won't neglect the diagnosis column for long, however, as we will utilize these values for the y variable!
-
                    We remove the id column as it is just an identifier, and does not play a role in tumor classification.  
-
                    If working with your own dataset, make sure you remove the irrelevant columns pertaining to your dataset!
                    """)
         X = df.drop(['id', 'diagnosis'], axis=1)
@@ -526,7 +543,6 @@ if selected == "KNN":
         if st.button('Part 2 Explanation'):
             st.write("""
                     Since the diagnosis column contains the classifiers, we consider this the dependent variable column.  
-
                     If working with your own dataset, make sure you do some research on indexes so that you can accurately 
                     store your classifier column!
                     """)
@@ -536,20 +552,19 @@ if selected == "KNN":
                     Part 3 splits the data into test and training sets using the X and Y variables we created previously.       
                     """)
         if st.button('Click for Part 3 Code'):
-            st.write("xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8, random_state =20221023)")
-        xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8,random_state=20221023)
+            st.write(
+                "xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8, random_state =20221023)")
+        xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8,
+                                                                                random_state=20221023)
         if st.button('Part 3 Explanation'):
             st.write("""
                    Part 3 will not return any output, but will instead assign data to variables that will return output later on 
                    in the classification process. 
-
                    You train the model using the training set, and test the model using the testing set. Training the model means to 
                    create the model, whereas testing the model means to test the accuracy of the model.  Training and testing sets
                    are created for both the X and Y variables.  
-
                    It is common to split the test and training sets by 20/80 percent, however, you should do some research on what is 
                    best for your model!  
-
                    The random_state number sets the seed so that you calculate the same accuracy each time.  Any number can be used, 
                    but many people prefer to use today's date.
                    """)
@@ -564,7 +579,7 @@ if selected == "KNN":
             st.write("""
                    The n_neighbors parameter declares the number of neighbors.  5 is the default.  Do some research to find
                    the best option for your dataset.  
-                   
+
                    Uniform weights means that all points in each neighborhood are weighed equally.  Do some research to find the best
                    option for your dataset. 
                    """)
@@ -597,7 +612,8 @@ if selected == "KNN":
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
         X = df.drop(['id', 'diagnosis'], axis=1)
         Y = df.iloc[:, 1]
-        xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8, random_state=20221023)
+        xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8,
+                                                                                random_state=20221023)
         KNNModel = KNeighborsClassifier(n_neighbors=5, leaf_size=1, weights='uniform')
         KNNModel.fit(xTrain, yTrain)
         predKNN = KNNModel.predict(xTest)
@@ -636,7 +652,8 @@ if selected == "KNN":
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
         X = df.drop(['id', 'diagnosis'], axis=1)
         Y = df.iloc[:, 1]
-        xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8, random_state =20221023)
+        xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8,
+                                                                                random_state=20221023)
         KNNModel = KNeighborsClassifier(n_neighbors=5, leaf_size=1, weights='uniform')
         KNNModel.fit(xTrain, yTrain)
         predKNN = KNNModel.predict(xTest)
@@ -654,15 +671,12 @@ if selected == "KNN":
             st.write("""
                     The top left value represents the true positive classifications.  This means you predicted positive and it's 
                     true.  In the case of our dataset, you predicted that a tumor is malignant and it actually is. 
-
                     The top right value represents the false positive classifications.  This is also known as a Type I error.
                     This means you predicted positive and it's false. In the case of our dataset, you predicted that a tumor is malignant
                     but it is actually benign.
-
                     The bottom left value represents the false negative classifications.  This is also known as a Type II error. 
                     This means you predicted negative and it's false.  In the case of our dataset, you predicted
                     that a tumor is benign but it is actually malignant.  
-
                     The bottom right value represents the true negative classifications.This means you predicted negative
                     and it's true.  In the case of our dataset, you predicted that a tumor is benign and it is indeed benign.   
                     """)
@@ -672,11 +686,12 @@ if selected == "KNN":
                     You are now a KNN classification pro and ready to classify your own dataset!!!
                     """)
 
-
-
-
 if selected == "Random Forest":
-    Random_Forest = st.selectbox('Random Forest: Select one option:', ['', 'Step 1: Check for Null Values','Step 2: Summarize Data', 'Step 3: Replace Classifier With 0 and 1', 'Step 4: Implement Test and Training Sets', 'Step 5: Accuracy Score', 'Step 6: Confusion Matrix'], format_func=lambda x: 'Select an option' if x == '' else x)
+    Random_Forest = st.selectbox('Random Forest: Select one option:',
+                                 ['', 'Step 1: Check for Null Values', 'Step 2: Summarize Data',
+                                  'Step 3: Replace Classifier With 0 and 1', 'Step 4: Implement Test and Training Sets',
+                                  'Step 5: Accuracy Score', 'Step 6: Confusion Matrix'],
+                                 format_func=lambda x: 'Select an option' if x == '' else x)
     if Random_Forest == 'Step 1: Check for Null Values':
         st.markdown("# Null Values Part 1")
         st.markdown("""
@@ -780,7 +795,6 @@ if selected == "Random Forest":
                     We can see that there are 212 Benign (1) tumors and 357 Malignant (0) 
                     tumors in the breast cancer dataset.  This is an acceptable representation of 
                     both classifiers, thus we can proceed with this dataset. 
-
                     Remember, if you are performing classification analysis on a different dataset, 
                     insert your classifier column name into the Part 3 code above. 
                     """)
@@ -799,7 +813,6 @@ if selected == "Random Forest":
             st.write("""
                     We can see that there is a good representation of both classifiers, where 0=malignant
                     and 1=benign. 
-
                     Remember, if you are performing classification analysis on a different dataset, 
                     insert your classifier column name into the Part 4 code above. 
                     """)
@@ -810,7 +823,7 @@ if selected == "Random Forest":
                     You have completed Random Forest, Replace Classifier!!!
                     You are ready to move on to the 'Test and Training Data' step!!!
                     """)
-    if Random_Forest ==  'Step 4: Implement Test and Training Sets':
+    if Random_Forest == 'Step 4: Implement Test and Training Sets':
         df.isnull().any()
         df = df.drop('Unnamed: 32', axis=1)
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
@@ -824,9 +837,7 @@ if selected == "Random Forest":
             st.write("""
                     Since the diagnosis column contains the classifiers, we want to remove this column from the X variable.  We 
                     won't neglect the diagnosis column for long, however, as we will utilize these values for the y variable!
-
                     We remove the id column as it is just an identifier, and does not play a role in tumor classification.  
-
                     If working with your own dataset, make sure you remove the irrelevant columns pertaining to your dataset!
                     """)
         X = df.drop(['id', 'diagnosis'], axis=1)
@@ -839,7 +850,6 @@ if selected == "Random Forest":
         if st.button('Part 2 Explanation'):
             st.write("""
                     Since the diagnosis column contains the classifiers, we consider this the dependent variable column.  
-
                     If working with your own dataset, make sure you do some research on indexes so that you can accurately 
                     store your classifier column!
                     """)
@@ -849,20 +859,19 @@ if selected == "Random Forest":
                     Part 3 splits the data into test and training sets using the X and Y variables we created previously.       
                     """)
         if st.button('Click for Part 3 Code'):
-            st.write("xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8, random_state =20221023)")
-        xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8,random_state=20221023)
+            st.write(
+                "xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8, random_state =20221023)")
+        xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8,
+                                                                                random_state=20221023)
         if st.button('Part 3 Explanation'):
             st.write("""
                     Part 3 will not return any output, but will instead assign data to variables that will return output later on 
                     in the classification process. 
-
                     You train the model using the training set, and test the model using the testing set. Training the model means to 
                     create the model, whereas testing the model means to test the accuracy of the model.  Training and testing sets
                     are created for both the X and Y variables.  
-
                     It is common to split the test and training sets by 20/80 percent, however, you should do some research on what is 
                     best for your model!  
-
                     The random_state number sets the seed so that you calculate the same accuracy each time.  Any number can be used, 
                     but many people prefer to use today's date.
                     """)
@@ -902,7 +911,8 @@ if selected == "Random Forest":
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
         X = df.drop(['id', 'diagnosis'], axis=1)
         Y = df.iloc[:, 1]
-        xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8, random_state=20221023)
+        xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8,
+                                                                                random_state=20221023)
         randomFModel = RandomForestClassifier()
         randomFModel.fit(xTrain, yTrain)
         randomFModel.score(xTrain, yTrain)
@@ -942,14 +952,16 @@ if selected == "Random Forest":
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
         X = df.drop(['id', 'diagnosis'], axis=1)
         Y = df.iloc[:, 1]
-        xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8, random_state=20221023)
+        xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8,
+                                                                                random_state=20221023)
         randomFModel = RandomForestClassifier()
         randomFModel.fit(xTrain, yTrain)
         predRandomF = randomFModel.predict(xTest)
         if st.button('Click for Part 1 Code'):
             st.write("""plt.figure(figsize=(16, 14))""")
             st.write("""plt.subplot(3, 3, 3)""")
-            st.write("""sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predRandomF), annot=True).set(title='Random Forest')""")
+            st.write(
+                """sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predRandomF), annot=True).set(title='Random Forest')""")
             st.write("""plt.show()""")
         plt.figure(figsize=(16, 14))
         plt.subplot(3, 3, 3)
@@ -960,15 +972,12 @@ if selected == "Random Forest":
             st.write("""
                     The top left value represents the true positive classifications.  This means you predicted positive and it's 
                     true.  In the case of our dataset, you predicted that a tumor is malignant and it actually is. 
-
                     The top right value represents the false positive classifications.  This is also known as a Type I error.
                     This means you predicted positive and it's false. In the case of our dataset, you predicted that a tumor is malignant
                     but it is actually benign.
-
                     The bottom left value represents the false negative classifications.  This is also known as a Type II error. 
                     This means you predicted negative and it's false.  In the case of our dataset, you predicted
                     that a tumor is benign but it is actually malignant.  
-
                     The bottom right value represents the true negative classifications.This means you predicted negative
                     and it's true.  In the case of our dataset, you predicted that a tumor is benign and it is indeed benign.   
                     """)
@@ -978,9 +987,12 @@ if selected == "Random Forest":
                     You are now a Random Forest classification pro and ready to classify your own dataset!!!
                     """)
 
-
 if selected == "Naive Bayes":
-    Naive_Bayes = st.selectbox('Naive Bayes: Select one option:', ['', 'Step 1: Check for Null Values','Step 2: Summarize Data', 'Step 3: Replace Classifier With 0 and 1', 'Step 4: Implement Test and Training Sets', 'Step 5: Accuracy Score', 'Step 6: Confusion Matrix'], format_func=lambda x: 'Select an option' if x == '' else x)
+    Naive_Bayes = st.selectbox('Naive Bayes: Select one option:',
+                               ['', 'Step 1: Check for Null Values', 'Step 2: Summarize Data',
+                                'Step 3: Replace Classifier With 0 and 1', 'Step 4: Implement Test and Training Sets',
+                                'Step 5: Accuracy Score', 'Step 6: Confusion Matrix'],
+                               format_func=lambda x: 'Select an option' if x == '' else x)
     if Naive_Bayes == 'Step 1: Check for Null Values':
         st.markdown("# Null Values Part 1")
         st.markdown("""
@@ -1084,7 +1096,6 @@ if selected == "Naive Bayes":
                     We can see that there are 212 Benign (1) tumors and 357 Malignant (0) 
                     tumors in the breast cancer dataset.  This is an acceptable representation of 
                     both classifiers, thus we can proceed with this dataset. 
-
                     Remember, if you are performing classification analysis on a different dataset, 
                     insert your classifier column name into the Part 3 code above. 
                     """)
@@ -1103,7 +1114,6 @@ if selected == "Naive Bayes":
             st.write("""
                     We can see that there is a good representation of both classifiers, where 0=malignant
                     and 1=benign. 
-
                     Remember, if you are performing classification analysis on a different dataset, 
                     insert your classifier column name into the Part 4 code above. 
                     """)
@@ -1114,7 +1124,7 @@ if selected == "Naive Bayes":
                     You have completed Naive Bayes, Replace Classifier!!!
                     You are ready to move on to the 'Test and Training Data' step!!!
                     """)
-    if Naive_Bayes ==  'Step 4: Implement Test and Training Sets':
+    if Naive_Bayes == 'Step 4: Implement Test and Training Sets':
         df.isnull().any()
         df = df.drop('Unnamed: 32', axis=1)
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
@@ -1128,9 +1138,7 @@ if selected == "Naive Bayes":
             st.write("""
                     Since the diagnosis column contains the classifiers, we want to remove this column from the X variable.  We 
                     won't neglect the diagnosis column for long, however, as we will utilize these values for the y variable!
-
                     We remove the id column as it is just an identifier, and does not play a role in tumor classification.  
-
                     If working with your own dataset, make sure you remove the irrelevant columns pertaining to your dataset!
                     """)
         X = df.drop(['id', 'diagnosis'], axis=1)
@@ -1143,7 +1151,6 @@ if selected == "Naive Bayes":
         if st.button('Part 2 Explanation'):
             st.write("""
                     Since the diagnosis column contains the classifiers, we consider this the dependent variable column.  
-
                     If working with your own dataset, make sure you do some research on indexes so that you can accurately 
                     store your classifier column!
                     """)
@@ -1153,20 +1160,19 @@ if selected == "Naive Bayes":
                     Part 3 splits the data into test and training sets using the X and Y variables we created previously.       
                     """)
         if st.button('Click for Part 3 Code'):
-            st.write("xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8, random_state =20221023)")
-        xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8, random_state=20221023)
+            st.write(
+                "xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8, random_state =20221023)")
+        xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8,
+                                                                                random_state=20221023)
         if st.button('Part 3 Explanation'):
             st.write("""
                     Part 3 will not return any output, but will instead assign data to variables that will return output later on 
                     in the classification process. 
-
                     You train the model using the training set, and test the model using the testing set. Training the model means to 
                     create the model, whereas testing the model means to test the accuracy of the model.  Training and testing sets
                     are created for both the X and Y variables.  
-
                     It is common to split the test and training sets by 20/80 percent, however, you should do some research on what is 
                     best for your model!  
-
                     The random_state number sets the seed so that you calculate the same accuracy each time.  Any number can be used, 
                     but many people prefer to use today's date.
                     """)
@@ -1206,7 +1212,8 @@ if selected == "Naive Bayes":
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
         X = df.drop(['id', 'diagnosis'], axis=1)
         Y = df.iloc[:, 1]
-        xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8, random_state=20221023)
+        xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8,
+                                                                                random_state=20221023)
         NB = GaussianNB()
         NB.fit(xTrain, yTrain)
         predNB = NB.predict(xTest)
@@ -1245,7 +1252,8 @@ if selected == "Naive Bayes":
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
         X = df.drop(['id', 'diagnosis'], axis=1)
         Y = df.iloc[:, 1]
-        xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8, random_state=20221023)
+        xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8,
+                                                                                random_state=20221023)
         NB = GaussianNB()
         NB.fit(xTrain, yTrain)
         predNB = NB.predict(xTest)
@@ -1271,15 +1279,12 @@ if selected == "Naive Bayes":
             st.write("""
                     The top left value represents the true positive classifications.  This means you predicted positive and it's 
                     true.  In the case of our dataset, you predicted that a tumor is malignant and it actually is. 
-
                     The top right value represents the false positive classifications.  This is also known as a Type I error.
                     This means you predicted positive and it's false. In the case of our dataset, you predicted that a tumor is malignant
                     but it is actually benign.
-
                     The bottom left value represents the false negative classifications.  This is also known as a Type II error. 
                     This means you predicted negative and it's false.  In the case of our dataset, you predicted
                     that a tumor is benign but it is actually malignant.  
-
                     The bottom right value represents the true negative classifications.This means you predicted negative
                     and it's true.  In the case of our dataset, you predicted that a tumor is benign and it is indeed benign.   
                     """)
@@ -1334,7 +1339,7 @@ if selected == "Home":
         Random Forest, and Naive Bayes.  We provide a tutorial using a breast cancer dataset, and provide the code in hopes that you can perform
         classification on your own data set by making slight tweaks.  We also provide detailed explanations of what the code is doing, in hopes that
         you can gain a better understanding of each classification step.
-        
+
         In each of the classification steps, you will:
         1) Check for and Remove Null Values
         2) Summarize Your Data
@@ -1342,23 +1347,23 @@ if selected == "Home":
         4) Implement Test and Training Sets
         5) Determine the Accuracy Score
         6) Output a Confusion Matrix
-        
+
         By going through each of these steps, you will see that it is quite simple to classify your data in many different ways.  Our tutorial is 
         sufficient for any dataset with a binary classifier (i.e., a dataset with two class labels.  This may include diseased vs not diseased, spam vs 
         not spam, etc.).  After this tutorial, you will leave Classification Central a classification pro, and be able to impress people in industry with your ability to classify
         data via 4 different techniques.  
-        
+
         We hope you enjoy Classification Central, and that we have helped make your data science learning fun and easy!
         """)
     st.markdown("# The following is the Breast Cancer Dataset Used in the Tutorial:")
-    AgGrid(df, height=500, fit_columns_on_grid_load=False)
-    gb = GridOptionsBuilder.from_dataframe(df)
-    gb.configure_pagination(paginationAutoPageSize=True)  # Add pagination
-    gb.configure_side_bar()  # Add a sidebar
+    # AgGrid(df, height=500, fit_columns_on_grid_load=False)
+    # gb = GridOptionsBuilder.from_dataframe(df)
+    # gb.configure_pagination(paginationAutoPageSize=True)  # Add pagination
+    # gb.configure_side_bar()  # Add a sidebar
 
     st.markdown("# The following are summaries of the classification techniques covered by Classification Central:")
     st.markdown("""
-        
+
                 """)
     st.markdown("# Logistic Regression")
     st.markdown("""
@@ -1368,7 +1373,6 @@ if selected == "Home":
                 between the dependent and independent variable.  
                 """)
     st.markdown("""
-
                 """)
     st.markdown("# KNN")
     st.markdown("""
@@ -1380,7 +1384,6 @@ if selected == "Home":
                 like a breeze!
                 """)
     st.markdown("""
-
                 """)
     st.markdown("# Random Forest")
     st.markdown("""
@@ -1390,7 +1393,6 @@ if selected == "Home":
                 prediction.    
                 """)
     st.markdown("""
-
                 """)
     st.markdown("# Naive Bayes")
     st.markdown("""
@@ -1400,10 +1402,250 @@ if selected == "Home":
                 of x belonging to some class C.    
                 """)
 
+if selected == "Interactive Visualisations w/o Modelling":
+    padding = 0
+    st.markdown(f""" <style>
+        .reportview-container .main .block-container{{
+            padding-top: {padding}rem;
+            padding-right: {padding}rem;
+            padding-left: {padding}rem;
+            padding-bottom: {padding}rem;
+        }} </style> """, unsafe_allow_html=True)
 
+    st.title("""
+    DANA - A Fun place to play around with Machine Learning algorithms! 
+    """)
+    # Can be used wherever a "file-like" object is accepted:
+    uploaded_file = st.file_uploader("")
+    if uploaded_file is not None:
+        dataframe = pd.read_csv(uploaded_file)
+        st.write(dataframe)
+        numeric_cols = dataframe.select_dtypes(include=['number']).columns
+        non_numeric_cols = dataframe.select_dtypes(exclude=['number']).columns
 
+    supervised = st.selectbox('Select one option:',
+                              ['', 'Data Report', 'Summary of my Data', 'Check for Null Values in the data'],
+                              format_func=lambda x: 'Select an option' if x == '' else x)
 
+    if supervised:
+        st.success('Yay! 🎉')
+    else:
+        st.warning('No option is selected')
+    # print("you selected: ",option)
+    if supervised == 'Data Report':
+        pr = dataframe.profile_report()
+        st_profile_report(pr)
 
+    if supervised == 'Summary of my Data':
+        summary = dataframe.describe()
+        st.write(summary)
 
+    if supervised == 'Check for Null Values in the data':
+        nullData = dataframe.isnull().sum()
+        st.write(nullData)
+        nullDataPercentage = dataframe.isnull().mean()
+        Clean_DF = dataframe.copy()
 
+        cleanDF_option = st.selectbox('Select one option:',
+                                      ['', 'Remove columns with Nulls values', 'Impute the null with constant values',
+                                       'Impute the null with statistics'],
+                                      format_func=lambda x: 'Select an option' if x == '' else x)
+        if cleanDF_option == 'Remove columns with Nulls values':
+            # Removing the columns with null values but only those columns that have null value percentage greater than 30% in the column.
+            nullDataPercentage[nullDataPercentage > .3]
+            CleanDF_less_missing_columns = dataframe.loc[:,
+                                           nullDataPercentage <= .3].copy()  # equivalent to df.drop(columns=pct_missing[pct_missing > .3].index)
+            # CleanDF_less_missing_columns.shape
+            st.write("The updated DataSet is")
+            st.write(CleanDF_less_missing_columns.head())
+        if cleanDF_option == 'Impute the null with constant values':
+            CleanDF_replace_constant = dataframe.copy()
+            # numeric_cols = dataframe.select_dtypes(include=['number']).columns
+            # non_numeric_cols = dataframe.select_dtypes(exclude=['number']).columns
+            CleanDF_replace_constant[numeric_cols] = CleanDF_replace_constant[numeric_cols].fillna(0)
+            CleanDF_replace_constant[non_numeric_cols] = CleanDF_replace_constant[non_numeric_cols].fillna('NA')
+            CleanDF_constant = CleanDF_replace_constant.head()
+
+            # st.write(CleanDF_constant)
+        if cleanDF_option == 'Impute the null with statistics':
+            CleanDF_replace_statistics = dataframe.copy()
+
+            cleanDF_option_replace = st.selectbox('Select one option:',
+                                                  ['', 'Mean', 'Median', 'Mode'],
+                                                  format_func=lambda x: 'Select an option' if x == '' else x)
+
+            st.write("This option only works on Numerical Columns")
+            if cleanDF_option_replace == 'Mean':
+                mean = CleanDF_replace_statistics[numeric_cols].mean()
+                CleanDF_replace_statistics[numeric_cols] = CleanDF_replace_statistics[numeric_cols].fillna(mean)
+                # st.write(CleanDF_replace_statistics.head())
+            if cleanDF_option_replace == 'Median':
+                med = CleanDF_replace_statistics[numeric_cols].median()
+                CleanDF_replace_statistics[numeric_cols] = CleanDF_replace_statistics[numeric_cols].fillna(med)
+                # st.write(CleanDF_replace_statistics.head())
+            if cleanDF_option_replace == 'Mode':
+                mode = CleanDF_replace_statistics[numeric_cols].mode()
+                CleanDF_replace_statistics[numeric_cols] = CleanDF_replace_statistics[numeric_cols].fillna(mode)
+                # st.write(CleanDF_replace_statistics.head())
+
+        if (cleanDF_option == 'Remove columns with Nulls values'):
+            Clean_DF = CleanDF_less_missing_columns.copy()
+        if (cleanDF_option == 'Impute the null with constant values'):
+            Clean_DF = CleanDF_replace_constant.copy()
+        if (cleanDF_option == 'Impute the null with statistics'):
+            Clean_DF = CleanDF_replace_statistics.copy()
+        if ((cleanDF_option == 'Impute the null with statistics') and (cleanDF_option_replace == 'Mean')):
+            Clean_DF = CleanDF_replace_statistics.copy()
+        if ((cleanDF_option == 'Impute the null with statistics') and (cleanDF_option_replace == 'Median')):
+            Clean_DF = CleanDF_replace_statistics.copy()
+        if ((cleanDF_option == 'Impute the null with statistics') and (cleanDF_option_replace == 'Mode')):
+            Clean_DF = CleanDF_replace_statistics.copy()
+
+        st.write("Please find the cleaned dataset below:")
+        st.write(Clean_DF.head())
+        st.write("Data Analysis")
+
+        # if supervised == 'Data Analysis':
+        #     # # edaDF_option = st.selectbox('Select one option:',
+        #     #                               ['', 'Descriptive Analysis', 'Target Analysis'],
+        #     #                               format_func=lambda x: 'Select an option' if x == '' else x)
+        #
+        edaDF_option = ['Descriptive Analysis', 'Target Analysis',
+                        'Distribution of Numerical Columns', 'Count Plots of Categorical Columns',
+                        'Box Plots', 'Outlier Analysis', 'Variance of Target with Categorical Columns']
+        functions.bar_space(3)
+        vizuals = st.multiselect("Choose which visualizations you want to see 👇", edaDF_option)
+
+        if 'Descriptive Analysis' in vizuals:
+            st.subheader('Descriptive Analysis:')
+            st.dataframe(Clean_DF.describe())
+
+        if 'Target Analysis' in vizuals:
+            st.subheader("Select target column:")
+            target_column = st.selectbox("", Clean_DF.columns, index=len(Clean_DF.columns) - 1)
+
+            st.subheader("Histogram of target column")
+            fig = px.histogram(Clean_DF, x=target_column)
+            c1, c2, c3 = st.columns([0.5, 2, 0.5])
+            c2.plotly_chart(fig)
+
+        num_columns = Clean_DF.select_dtypes(exclude='object').columns
+        cat_columns = Clean_DF.select_dtypes(include='object').columns
+
+        if 'Distribution of Numerical Columns' in vizuals:
+
+            if len(num_columns) == 0:
+                st.write('There is no numerical columns in the data.')
+            else:
+                selected_num_cols = functions.multiselect_container('Choose columns for Distribution plots:',
+                                                                    num_columns, 'Distribution')
+                st.subheader('Distribution of numerical columns')
+                i = 0
+                while (i < len(selected_num_cols)):
+                    c1, c2 = st.columns(2)
+                    for j in [c1, c2]:
+
+                        if (i >= len(selected_num_cols)):
+                            break
+
+                        fig = px.histogram(Clean_DF, x=selected_num_cols[i])
+                        j.plotly_chart(fig, use_container_width=True)
+                        i += 1
+        if 'Count Plots of Categorical Columns' in vizuals:
+
+            if len(cat_columns) == 0:
+                st.write('There is no categorical columns in the data.')
+            else:
+                selected_cat_cols = functions.multiselect_container('Choose columns for Count plots:', cat_columns,
+                                                                    'Count')
+                st.subheader('Count plots of categorical columns')
+                i = 0
+                while (i < len(selected_cat_cols)):
+                    c1, c2 = st.columns(2)
+                    for j in [c1, c2]:
+
+                        if (i >= len(selected_cat_cols)):
+                            break
+
+                        fig = px.histogram(Clean_DF, x=selected_cat_cols[i], color_discrete_sequence=['indianred'])
+                        j.plotly_chart(fig)
+                        i += 1
+        if 'Box Plots' in vizuals:
+            if len(num_columns) == 0:
+                st.write('There is no numerical columns in the data.')
+            else:
+                selected_num_cols = functions.multiselect_container('Choose columns for Box plots:', num_columns,
+                                                                    'Box')
+                st.subheader('Box plots')
+                i = 0
+                while (i < len(selected_num_cols)):
+                    c1, c2 = st.columns(2)
+                    for j in [c1, c2]:
+
+                        if (i >= len(selected_num_cols)):
+                            break
+
+                        fig = px.box(Clean_DF, y=selected_num_cols[i])
+                        j.plotly_chart(fig, use_container_width=True)
+                        i += 1
+
+        if 'Outlier Analysis' in vizuals:
+            st.subheader('Outlier Analysis')
+            c1, c2, c3 = st.columns([1, 2, 1])
+            c2.dataframe(functions.number_of_outliers(Clean_DF))
+
+        if 'Variance of Target with Categorical Columns' in vizuals:
+
+            df_1 = Clean_DF.dropna()
+
+            high_cardi_columns = []
+            normal_cardi_columns = []
+
+            for i in cat_columns:
+                if (Clean_DF[i].nunique() > Clean_DF.shape[0] / 10):
+                    high_cardi_columns.append(i)
+                else:
+                    normal_cardi_columns.append(i)
+
+            if len(normal_cardi_columns) == 0:
+                st.write('There is no categorical columns with normal cardinality in the data.')
+            else:
+
+                st.subheader('Variance of target variable with categorical columns')
+                model_type = st.radio('Select Problem Type:', ('Regression', 'Classification'), key='model_type')
+                selected_cat_cols = functions.multiselect_container('Choose columns for Category Colored plots:',
+                                                                    normal_cardi_columns, 'Category')
+
+                if 'Target Analysis' not in vizuals:
+                    target_column = st.selectbox("Select target column:", Clean_DF.columns,
+                                                 index=len(Clean_DF.columns) - 1)
+
+                i = 0
+                while (i < len(selected_cat_cols)):
+
+                    if model_type == 'Regression':
+                        fig = px.box(df_1, y=target_column, color=selected_cat_cols[i])
+                    else:
+                        fig = px.histogram(df_1, color=selected_cat_cols[i], x=target_column)
+
+                    st.plotly_chart(fig, use_container_width=True)
+                    i += 1
+
+                if high_cardi_columns:
+                    if len(high_cardi_columns) == 1:
+                        st.subheader(
+                            'The following column has high cardinality, that is why its boxplot was not plotted:')
+                    else:
+                        st.subheader(
+                            'The following columns have high cardinality, that is why its boxplot was not plotted:')
+                    for i in high_cardi_columns:
+                        st.write(i)
+
+                    st.write('<p style="font-size:140%">Do you want to plot anyway?</p>', unsafe_allow_html=True)
+                    answer = st.selectbox("", ('No', 'Yes'))
+
+                    if answer == 'Yes':
+                        for i in high_cardi_columns:
+                            fig = px.box(df_1, y=target_column, color=i)
+                            st.plotly_chart(fig, use_container_width=True)
 
