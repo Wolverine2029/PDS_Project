@@ -1,24 +1,18 @@
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn import preprocessing
-import sklearn.model_selection, sklearn.linear_model, sklearn.svm, sklearn.metrics
-from sklearn.tree import DecisionTreeClassifier
+import sklearn.metrics
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.svm import SVC
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import accuracy_score
-from  sklearn.model_selection import GridSearchCV
 import streamlit as st
-import pandas as pd
 from streamlit_option_menu import option_menu
+import numpy as np
+from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
 
-#ain Page
 EXAMPLE_NO = 3
-
 
 def streamlit_menu(example=3):
     if example == 3:
@@ -60,31 +54,32 @@ if selected == "About":
     st.title(f"{selected}")
 if selected == "Contact":
     st.title(f"{selected}")
-from streamlit_option_menu import option_menu
+
+#insert file path name here
 df = pd.read_csv("/Users/allyryan/Downloads/data.csv")
-
-
 
 if selected == "Logistic Regression":
     Logistic_Regression = st.selectbox('Logistic Regression: Select one option:', ['', 'Step 1: Check for Null Values','Step 2: Summarize Data', 'Step 3: Replace Classifier With 0 and 1', 'Step 4: Implement Test and Training Sets', 'Step 5: Accuracy Score', 'Step 6: Confusion Matrix'], format_func=lambda x: 'Select an option' if x == '' else x)
-#if Logistic_Regression:
-    #st.success('Yay! 🎉')
-#else:
-    #st.warning('No option is selected')
     if Logistic_Regression == 'Step 1: Check for Null Values':
         st.markdown("# Null Values Part 1")
         st.markdown("""
                     Part 1 is to determine if there are any null values in the data.
-                    In this step, we print out all of the column names.  Any column name 
-                    that returns true signifies a null value and will need to be deleted.
+                    In this step, we print out all of the column names.  A true value represents 
+                    a null value and will need to be located and deleted. 
                     """)
         if st.button('Click for Part 1 Code'):
             st.write("df.isnull().any()")
         st.text(df.isnull().any())
         if st.button('Part 1 Explanation'):
-            st.write("At the bottom of the column name list, we see that there "
-                     "are 32 null values, signified by the 'true' statement.  The column is labeled 'Unnamed: 32 "
-                     "and we seek to delete that column.")
+            st.write("""
+                    At the bottom of the column name list, we see that there
+                    are 32 null values, signified by the 'true' statement.  All of the null
+                    values are located in the 'Unnamed: 32 column and thus we will drop the entire column.
+                    Do some research on your dataset to determine if you have an entire null column, or just a 
+                    few null values within several of the columns.  If this is the case, don't drop the whole column
+                    for your dataset.  Instead, just drop the nulls in each column.  This can be done with a df.dropna()
+                    command. 
+                    """)
         st.markdown("# Null Values Part 2")
         st.markdown("""
                     Part 2 is to delete the null values in our dataset.
@@ -94,7 +89,9 @@ if selected == "Logistic Regression":
         df = df.drop('Unnamed: 32', axis=1)
         if st.button('Part 2 Explanation'):
             st.write("Once we perform the df.drop function on our identified null values, "
-                     "we have removed all nulls from our dataset.")
+                     "we have removed all nulls from our dataset.  If you have a different dataset, change "
+                     "the column name to reflect your dataset.  If you are not dropping an entire column but just several rows, "
+                     "use the df.dropna() command.")
         st.markdown(""
                     "")
         st.markdown("# Congrats 🎉!!!")
@@ -311,8 +308,8 @@ if selected == "Logistic Regression":
                     """)
         if st.button('Click for Part 2 Code'):
             st.write("accuracy_score(yTest, predRegression) * 100")
-            st.text("Accuracy Score: ")
-            st.text(accuracy_score(yTest, predRegression) * 100)
+        st.text("Accuracy Score: ")
+        st.text(accuracy_score(yTest, predRegression) * 100)
         if st.button("Part 2 Explanation"):
             st.write("""
                     Accuracy score is calculated by dividing the number of correct predictions by the total prediction number.
@@ -332,12 +329,10 @@ if selected == "Logistic Regression":
         regressionModel.fit(xTrain, yTrain)
         predRegression = regressionModel.predict(xTest)
         if st.button('Click for Part 1 Code'):
-            st.write(""""
-            plt.figure(figsize=(16, 14))
-            plt.subplot(3, 3, 1)
-            sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predRegression), annot=True).set(title='Logistic Regression')
-            plt.show()
-            """)
+            st.write("""plt.figure(figsize=(16, 14))""")
+            st.write("""plt.subplot(3, 3, 1)""")
+            st.write("""sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predRegression), annot=True).set(title='Logistic Regression')""")
+            st.write("""plt.show()""")
         plt.figure(figsize=(16, 14))
         plt.subplot(3, 3, 1)
         sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predRegression), annot=True).set(title='Logistic Regression')
@@ -353,7 +348,7 @@ if selected == "Logistic Regression":
                     This means you predicted positive and it's false. In the case of our dataset, you predicted that a tumor is malignant
                     but it is actually benign.
                       
-                    The bottom left value represents the false negative classifications.  This is also known as a Type I error. 
+                    The bottom left value represents the false negative classifications.  This is also known as a Type II error. 
                     This means you predicted negative and it's false.  In the case of our dataset, you predicted
                     that a tumor is benign but it is actually malignant.  
                      
@@ -372,27 +367,35 @@ if selected == "KNN":
     if KNN == 'Step 1: Check for Null Values':
         st.markdown("# Null Values Part 1")
         st.markdown("""
-                    Part 1 is to determine if there are any null values in the data.
-                    In this step, we print out all of the column names.  Any column name 
-                    that returns true signifies a null value and will need to be deleted.
-                    """)
+                            Part 1 is to determine if there are any null values in the data.
+                            In this step, we print out all of the column names.  A true value represents 
+                            a null value and will need to be located and deleted. 
+                            """)
         if st.button('Click for Part 1 Code'):
             st.write("df.isnull().any()")
         st.text(df.isnull().any())
         if st.button('Part 1 Explanation'):
-            st.write("At the bottom of the column name list, we see that there "
-                     "are 32 null values, signified by the 'true' statement.  The column is labeled 'Unnamed: 32 "
-                     "and we seek to delete that column.")
+            st.write("""
+                            At the bottom of the column name list, we see that there
+                            are 32 null values, signified by the 'true' statement.  All of the null
+                            values are located in the 'Unnamed: 32 column and thus we will drop the entire column.
+                            Do some research on your dataset to determine if you have an entire null column, or just a 
+                            few null values within several of the columns.  If this is the case, don't drop the whole column
+                            for your dataset.  Instead, just drop the nulls in each column.  This can be done with a df.dropna()
+                            command. 
+                            """)
         st.markdown("# Null Values Part 2")
         st.markdown("""
-                    Part 2 is to delete the null values in our dataset.
-                    """)
+                            Part 2 is to delete the null values in our dataset.
+                            """)
         if st.button('Click for Part 2 Code'):
             st.write("df.drop('Unnamed: 32', axis=1)")
         df = df.drop('Unnamed: 32', axis=1)
         if st.button('Part 2 Explanation'):
             st.write("Once we perform the df.drop function on our identified null values, "
-                     "we have removed all nulls from our dataset.")
+                     "we have removed all nulls from our dataset.  If you have a different dataset, change "
+                     "the column name to reflect your dataset.  If you are not dropping an entire column but just several rows, "
+                     "use the df.dropna() command.")
         st.markdown(""
                     "")
         st.markdown("# Congrats 🎉!!!")
@@ -617,8 +620,8 @@ if selected == "KNN":
                     """)
         if st.button('Click for Part 2 Code'):
             st.write("accuracy_score(yTest, predKNN) * 100")
-            st.text("Accuracy Score: ")
-            st.text(accuracy_score(yTest, predKNN) * 100)
+        st.text("Accuracy Score: ")
+        st.text(accuracy_score(yTest, predKNN) * 100)
         if st.button("Part 2 Explanation"):
             st.write("""
                     Accuracy score is calculated by dividing the number of correct predictions by the total prediction number.
@@ -638,12 +641,10 @@ if selected == "KNN":
         KNNModel.fit(xTrain, yTrain)
         predKNN = KNNModel.predict(xTest)
         if st.button('Click for Part 1 Code'):
-            st.write(""""
-                    plt.figure(figsize=(16, 14))
-                    plt.subplot(3, 3, 2)
-                    sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predKNN), annot=True).set(title= 'KNN')
-                    plt.show()
-                    """)
+            st.write("""plt.figure(figsize=(16, 14))""")
+            st.write("""plt.subplot(3, 3, 2)""")
+            st.write("""sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predKNN), annot=True).set(title= 'KNN')""")
+            st.write("""plt.show()""")
         plt.figure(figsize=(16, 14))
         plt.subplot(3, 3, 2)
         sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predKNN), annot=True).set(title='KNN')
@@ -658,7 +659,7 @@ if selected == "KNN":
                     This means you predicted positive and it's false. In the case of our dataset, you predicted that a tumor is malignant
                     but it is actually benign.
 
-                    The bottom left value represents the false negative classifications.  This is also known as a Type I error. 
+                    The bottom left value represents the false negative classifications.  This is also known as a Type II error. 
                     This means you predicted negative and it's false.  In the case of our dataset, you predicted
                     that a tumor is benign but it is actually malignant.  
 
@@ -679,27 +680,35 @@ if selected == "Random Forest":
     if Random_Forest == 'Step 1: Check for Null Values':
         st.markdown("# Null Values Part 1")
         st.markdown("""
-                    Part 1 is to determine if there are any null values in the data.
-                    In this step, we print out all of the column names.  Any column name 
-                    that returns true signifies a null value and will need to be deleted.
-                    """)
+                            Part 1 is to determine if there are any null values in the data.
+                            In this step, we print out all of the column names.  A true value represents 
+                            a null value and will need to be located and deleted. 
+                            """)
         if st.button('Click for Part 1 Code'):
             st.write("df.isnull().any()")
         st.text(df.isnull().any())
         if st.button('Part 1 Explanation'):
-            st.write("At the bottom of the column name list, we see that there "
-                     "are 32 null values, signified by the 'true' statement.  The column is labeled 'Unnamed: 32 "
-                     "and we seek to delete that column.")
+            st.write("""
+                            At the bottom of the column name list, we see that there
+                            are 32 null values, signified by the 'true' statement.  All of the null
+                            values are located in the 'Unnamed: 32 column and thus we will drop the entire column.
+                            Do some research on your dataset to determine if you have an entire null column, or just a 
+                            few null values within several of the columns.  If this is the case, don't drop the whole column
+                            for your dataset.  Instead, just drop the nulls in each column.  This can be done with a df.dropna()
+                            command. 
+                            """)
         st.markdown("# Null Values Part 2")
         st.markdown("""
-                    Part 2 is to delete the null values in our dataset.
-                    """)
+                            Part 2 is to delete the null values in our dataset.
+                            """)
         if st.button('Click for Part 2 Code'):
             st.write("df.drop('Unnamed: 32', axis=1)")
         df = df.drop('Unnamed: 32', axis=1)
         if st.button('Part 2 Explanation'):
             st.write("Once we perform the df.drop function on our identified null values, "
-                     "we have removed all nulls from our dataset.")
+                     "we have removed all nulls from our dataset.  If you have a different dataset, change "
+                     "the column name to reflect your dataset.  If you are not dropping an entire column but just several rows, "
+                     "use the df.dropna() command.")
         st.markdown(""
                     "")
         st.markdown("# Congrats 🎉!!!")
@@ -917,8 +926,8 @@ if selected == "Random Forest":
                     """)
         if st.button('Click for Part 2 Code'):
             st.write("accuracy_score(yTest, predRandomF) * 100")
-            st.text("Accuracy Score: ")
-            st.text(accuracy_score(yTest, predRandomF) * 100)
+        st.text("Accuracy Score: ")
+        st.text(accuracy_score(yTest, predRandomF) * 100)
         if st.button("Part 2 Explanation"):
             st.write("""
                     Accuracy score is calculated by dividing the number of correct predictions by the total prediction number.
@@ -938,12 +947,10 @@ if selected == "Random Forest":
         randomFModel.fit(xTrain, yTrain)
         predRandomF = randomFModel.predict(xTest)
         if st.button('Click for Part 1 Code'):
-            st.write(""""
-                    plt.figure(figsize=(16, 14))
-                    plt.subplot(3, 3, 3)
-                    sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predRandomF), annot=True).set(title='Random Forest')
-                    plt.show()
-                    """)
+            st.write("""plt.figure(figsize=(16, 14))""")
+            st.write("""plt.subplot(3, 3, 3)""")
+            st.write("""sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predRandomF), annot=True).set(title='Random Forest')""")
+            st.write("""plt.show()""")
         plt.figure(figsize=(16, 14))
         plt.subplot(3, 3, 3)
         sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predRandomF), annot=True).set(title='Random Forest')
@@ -958,7 +965,7 @@ if selected == "Random Forest":
                     This means you predicted positive and it's false. In the case of our dataset, you predicted that a tumor is malignant
                     but it is actually benign.
 
-                    The bottom left value represents the false negative classifications.  This is also known as a Type I error. 
+                    The bottom left value represents the false negative classifications.  This is also known as a Type II error. 
                     This means you predicted negative and it's false.  In the case of our dataset, you predicted
                     that a tumor is benign but it is actually malignant.  
 
@@ -977,27 +984,35 @@ if selected == "Naive Bayes":
     if Naive_Bayes == 'Step 1: Check for Null Values':
         st.markdown("# Null Values Part 1")
         st.markdown("""
-                    Part 1 is to determine if there are any null values in the data.
-                    In this step, we print out all of the column names.  Any column name 
-                    that returns true signifies a null value and will need to be deleted.
-                    """)
+                            Part 1 is to determine if there are any null values in the data.
+                            In this step, we print out all of the column names.  A true value represents 
+                            a null value and will need to be located and deleted. 
+                            """)
         if st.button('Click for Part 1 Code'):
             st.write("df.isnull().any()")
         st.text(df.isnull().any())
         if st.button('Part 1 Explanation'):
-            st.write("At the bottom of the column name list, we see that there "
-                     "are 32 null values, signified by the 'true' statement.  The column is labeled 'Unnamed: 32 "
-                     "and we seek to delete that column.")
+            st.write("""
+                            At the bottom of the column name list, we see that there
+                            are 32 null values, signified by the 'true' statement.  All of the null
+                            values are located in the 'Unnamed: 32 column and thus we will drop the entire column.
+                            Do some research on your dataset to determine if you have an entire null column, or just a 
+                            few null values within several of the columns.  If this is the case, don't drop the whole column
+                            for your dataset.  Instead, just drop the nulls in each column.  This can be done with a df.dropna()
+                            command. 
+                            """)
         st.markdown("# Null Values Part 2")
         st.markdown("""
-                    Part 2 is to delete the null values in our dataset.
-                    """)
+                            Part 2 is to delete the null values in our dataset.
+                            """)
         if st.button('Click for Part 2 Code'):
             st.write("df.drop('Unnamed: 32', axis=1)")
         df = df.drop('Unnamed: 32', axis=1)
         if st.button('Part 2 Explanation'):
             st.write("Once we perform the df.drop function on our identified null values, "
-                     "we have removed all nulls from our dataset.")
+                     "we have removed all nulls from our dataset.  If you have a different dataset, change "
+                     "the column name to reflect your dataset.  If you are not dropping an entire column but just several rows, "
+                     "use the df.dropna() command.")
         st.markdown(""
                     "")
         st.markdown("# Congrats 🎉!!!")
@@ -1261,7 +1276,7 @@ if selected == "Naive Bayes":
                     This means you predicted positive and it's false. In the case of our dataset, you predicted that a tumor is malignant
                     but it is actually benign.
 
-                    The bottom left value represents the false negative classifications.  This is also known as a Type I error. 
+                    The bottom left value represents the false negative classifications.  This is also known as a Type II error. 
                     This means you predicted negative and it's false.  In the case of our dataset, you predicted
                     that a tumor is benign but it is actually malignant.  
 
@@ -1279,7 +1294,12 @@ if selected == "About":
     st.markdown("""
                 """)
     st.markdown("""
-                Classification Central was created as part of a Comp-Sci 5530 project for UMKC...
+                Classification Central was created as part of a Comp-Sci 5530 project for UMKC and Hack-a-Roo.  The goal of the project was to create
+                a user interface for naive data scientists learning how to classify data.  By providing the code, the output of the code, and explanations of each 
+                of the steps and its corresponding output within the 4 different classification techniques, we hope we have improved the ability of beginner data scientists 
+                to understand classification.  As a result of this project, the developers also had the opportunity to learn a new tool: Streamlit, as well as refresh their memory 
+                in popular classification techniques.  It is always helpful in industry to be able to have clear knowledge of data science concepts, and as a result of this project, the
+                Classification Central developers can simply and accurately explain the basics behind logistic regression, KNN, Random Forest, and Naive Bayes.  
                 """)
     st.markdown("# Ally Ryan")
     st.markdown("## UMKC Data Science Graduate Student")
@@ -1314,35 +1334,70 @@ if selected == "Home":
         Random Forest, and Naive Bayes.  We provide a tutorial using a breast cancer dataset, and provide the code in hopes that you can perform
         classification on your own data set by making slight tweaks.  We also provide detailed explanations of what the code is doing, in hopes that
         you can gain a better understanding of each classification step.
+        
+        In each of the classification steps, you will:
+        1) Check for and Remove Null Values
+        2) Summarize Your Data
+        3) Replace the Classifier with 0 and 1
+        4) Implement Test and Training Sets
+        5) Determine the Accuracy Score
+        6) Output a Confusion Matrix
+        
+        By going through each of these steps, you will see that it is quite simple to classify your data in many different ways.  Our tutorial is 
+        sufficient for any dataset with a binary classifier (i.e., a dataset with two class labels.  This may include diseased vs not diseased, spam vs 
+        not spam, etc.).  After this tutorial, you will leave Classification Central a classification pro, and be able to impress people in industry with your ability to classify
+        data via 4 different techniques.  
+        
+        We hope you enjoy Classification Central, and that we have helped make your data science learning fun and easy!
         """)
+    st.markdown("# The following is the Breast Cancer Dataset Used in the Tutorial:")
+    AgGrid(df, height=500, fit_columns_on_grid_load=False)
+    gb = GridOptionsBuilder.from_dataframe(df)
+    gb.configure_pagination(paginationAutoPageSize=True)  # Add pagination
+    gb.configure_side_bar()  # Add a sidebar
+
     st.markdown("# The following are summaries of the classification techniques covered by Classification Central:")
     st.markdown("""
         
                 """)
     st.markdown("# Logistic Regression")
     st.markdown("""
-                Enter Log Regression Summary Here
+                Whereas linear regression is often used to predict continuous-valued outcomes (such as the weight of a person or the amount of rainfall),
+                logistic regression is used to predict binomial (Y=0 or 1) categorical outcomes.  In logistic regression, there are one or more independent variables
+                that determine an outcome.  The statistical methods used to perform the logistic regression are meant to identify the model that best fits the relationship 
+                between the dependent and independent variable.  
                 """)
     st.markdown("""
 
                 """)
     st.markdown("# KNN")
     st.markdown("""
-                Enter KNN Summary Here
+                The k-nearest neighbors algorithm is a supervised machine learning algorithm that can be used to solve classification problems.  Within the
+                algorithm, KNN assumes that similar things are in close proximity of each other.  To determine the similarity between data points, KNN 
+                uses math to calculate the distance between the data points.  Python can perform KNN with a few simple lines of code.  However, behind the scenes,
+                the are calculations that determine the appropriate number of neighbors, perform calculations pertaining to distances, and for classification, return
+                the mode of K labels that result from sorting the distances within each neighbor in ascending order. Whew! Don't worry, our tutorial will make KNN seem
+                like a breeze!
                 """)
     st.markdown("""
 
                 """)
     st.markdown("# Random Forest")
     st.markdown("""
-                Enter Random Forest Summary Here
+                A random forest is a classification technique that uses many decision trees.  Therefore, the many decision trees create a forest!
+                A decision tree is a collection of binary nodes that split the observations in a way that best separates and distinguishes the two 
+                classifiers. In the random forest algorithm, each tree outputs a class prediction and the class with the most votes becomes the model's 
+                prediction.    
                 """)
     st.markdown("""
 
                 """)
     st.markdown("# Naive Bayes")
     st.markdown("""
-                Enter Naive Bayes Summary Here
+                The Naive Bayes classifier is based on the Bayes theorem, which allows us to find the probability of A happening given that B has occured.
+                When the presence of on independent variable does not affect another, the classifier is called naive.  For example, if we are looking at weather, 
+                we cannot necessarily conclude that high temperatures also mean high humidity.  Statistically when using Naive Bayes, the goal is to find the probability
+                of x belonging to some class C.    
                 """)
 
 
