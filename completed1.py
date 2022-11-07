@@ -6,7 +6,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, confusion_matrix
 import streamlit as st
 from streamlit_option_menu import option_menu
 import numpy as np
@@ -1310,20 +1310,29 @@ if selected == "About":
         cybersecurity consultant.  Outside of school and work, I am an avid runner and am a middle 
         distance track runner for UMKC. 
         """)
-    st.markdown("# Insert Name")
-    st.markdown("## Insert Short Description")
+    st.markdown("# Anil Kochera")
+    st.markdown("## Computer Science Grad Student ")
     st.markdown("""
-            Insert Bio Paragraph 
+            Hello! My name is Anil Kochera and I'm pursuing Masters in CS. I love playing with data and always 
+            learning about new things happening in the Data Science field. 
             """)
-    st.markdown("# Insert Name")
-    st.markdown("## Insert Short Description")
+    st.markdown("# Nabila Hashim")
+    st.markdown("## Computer Science Grad Student ")
     st.markdown("""
-                Insert Bio Paragraph 
+                I am a graduate student majoring in computer science with emphasis on data science. I'm enthusiastic 
+                about data science, especially considering how quickly technology is changing the profession. I enjoy being 
+                a part of new technologies and trying out innovative solutions. I'm especially interested in artificial
+                intelligence after learning about machine learning in my studies, and I'm eager to use AI in a more practical capacity.
                 """)
-    st.markdown("# Insert Name")
-    st.markdown("## Insert Short Description")
+    st.markdown("# Danny Rider")
+    st.markdown("## Computer Science Grad Student")
     st.markdown("""
-                Insert Bio Paragraph 
+                Hey! My name is Daniel Rider and I'm pursuing a Masters In CS.  I did my undergraduate in 
+                Physics and I'm excited to learn about everything computer science, especially data 
+                science and machine learning.  I believe data science is a very innovative field, 
+                and I've been amazed at the rapid pace the field has been developing at.  Whether its facial 
+                recognition or forecasting sales, Data science is quickly becoming a necessity, and I'm 
+                excited to learn more! 
                 """)
 if selected == "Home":
     st.markdown("""
