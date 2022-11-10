@@ -12,6 +12,7 @@ from streamlit_option_menu import option_menu
 import numpy as np
 # from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
 import matplotlib
+import matplotlib.pyplot as plt
 matplotlib.use('TkAgg')
 from streamlit_option_menu import option_menu
 from streamlit_pandas_profiling import st_profile_report
@@ -190,7 +191,8 @@ if selected == "Logistic Regression":
             st.write("sns.countplot('diagnosis', data=df)")
             st.write("plt.show()")
         sns.countplot('diagnosis', data=df)
-        st.pyplot(plt.show())
+        st.set_option('deprecation.showPyplotGlobalUse', False)
+        st.pyplot()
         if st.button('Part 4 Explanation'):
             st.write("""
                     We can see that there is a good representation of both classifiers, where 0=malignant
@@ -349,7 +351,8 @@ if selected == "Logistic Regression":
         sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predRegression), annot=True).set(
             title='Logistic Regression')
         st.set_option('deprecation.showPyplotGlobalUse', False)
-        st.pyplot(plt.show())
+        #st.pyplot(plt.show())
+        st.pyplot()
         predVals = pd.DataFrame(data={'truth': yTest, 'regression': predRegression})
         if st.button("Part 1 Explanation"):
             st.write("""
@@ -492,7 +495,8 @@ if selected == "KNN":
             st.write("sns.countplot('diagnosis', data=df)")
             st.write("plt.show()")
         sns.countplot('diagnosis', data=df)
-        st.pyplot(plt.show())
+        st.set_option('deprecation.showPyplotGlobalUse', False)
+        st.pyplot()
         if st.button('Part 4 Explanation'):
             st.write("""
                     We can see that there is a good representation of both classifiers, where 0=malignant
@@ -656,7 +660,7 @@ if selected == "KNN":
         plt.subplot(3, 3, 2)
         sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predKNN), annot=True).set(title='KNN')
         st.set_option('deprecation.showPyplotGlobalUse', False)
-        st.pyplot(plt.show())
+        st.pyplot()
         if st.button("Part 1 Explanation"):
             st.write("""
                     The top left value represents the true positive classifications.  This means you predicted positive and it's 
@@ -798,7 +802,8 @@ if selected == "Random Forest":
             st.write("sns.countplot('diagnosis', data=df)")
             st.write("plt.show()")
         sns.countplot('diagnosis', data=df)
-        st.pyplot(plt.show())
+        st.set_option('deprecation.showPyplotGlobalUse', False)
+        st.pyplot()
         if st.button('Part 4 Explanation'):
             st.write("""
                     We can see that there is a good representation of both classifiers, where 0=malignant
@@ -957,7 +962,7 @@ if selected == "Random Forest":
         plt.subplot(3, 3, 3)
         sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predRandomF), annot=True).set(title='Random Forest')
         st.set_option('deprecation.showPyplotGlobalUse', False)
-        st.pyplot(plt.show())
+        st.pyplot()
         if st.button("Part 1 Explanation"):
             st.write("""
                     The top left value represents the true positive classifications.  This means you predicted positive and it's 
@@ -1099,7 +1104,8 @@ if selected == "Naive Bayes":
             st.write("sns.countplot('diagnosis', data=df)")
             st.write("plt.show()")
         sns.countplot('diagnosis', data=df)
-        st.pyplot(plt.show())
+        st.set_option('deprecation.showPyplotGlobalUse', False)
+        st.pyplot()
         if st.button('Part 4 Explanation'):
             st.write("""
                     We can see that there is a good representation of both classifiers, where 0=malignant
@@ -1264,7 +1270,7 @@ if selected == "Naive Bayes":
         plt.subplot(3, 3, 3)
         sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predNB), annot=True).set(title='Naive Bayes')
         st.set_option('deprecation.showPyplotGlobalUse', False)
-        st.pyplot(plt.show())
+        st.pyplot()
         if st.button("Part 1 Explanation"):
             st.write("""
                     The top left value represents the true positive classifications.  This means you predicted positive and it's 
