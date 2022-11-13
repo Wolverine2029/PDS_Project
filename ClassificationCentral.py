@@ -10,7 +10,6 @@ from sklearn.metrics import accuracy_score, confusion_matrix
 import streamlit as st
 from streamlit_option_menu import option_menu
 import numpy as np
-# from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
 import matplotlib
 
 matplotlib.use('TkAgg')
@@ -93,31 +92,31 @@ if selected == "Logistic Regression":
         if st.button('Explanation'):
             st.write("""
                     At the bottom of the column name list, we see that there
-                    are 32 null values, signified by the 'true' statement.  All of the null
-                    values are located in the 'Unnamed: 32 column and thus we will drop the entire column.
+                    are null values signified by the 'true' statement.  All of the null
+                    values are located in the 'Unnamed: 32' column and thus we will drop the entire column.
                     Do some research on your dataset to determine if you have an entire null column, or just a 
                     few null values within several of the columns.  If this is the case, don't drop the whole column
                     for your dataset.  Instead, just drop the nulls in each column.  This can be done with a df.dropna()
                     command. 
                     """)
-        st.markdown("# Check for null values: next step")
+        st.markdown("# Check for null values: Next step")
         st.markdown("""
                     Now, we will delete the null values in our dataset. 
-                    There are many ways to deal with Null values, go to our DIY section to learn more ways to deal with them!
+                    There are many ways to handle Null values, go to our DIY section to learn more ways to deal with them!
                     """)
-        if st.button('Code'):
+        if st.button('Code '):
             st.write("df.drop('Unnamed: 32', axis=1)")
         df = df.drop('Unnamed: 32', axis=1)
-        if st.button('Explanation'):
+        if st.button('Explanation '):
             st.write("Once we perform the df.drop function on our identified null values, "
                      "we have removed all nulls from our dataset.  If you have a different dataset, change "
                      "the column name to reflect your dataset.  If you are not dropping an entire column but just several rows, "
                      "use the df.dropna() command.")
         st.markdown(""
                     "")
-        st.markdown("# Yay! We successfully dealt with Null values")
+        st.markdown("# Yay! We successfully removed the Null values")
         st.markdown(""" 
-                Let's move on to Step 2
+                Let's move on to Step 2!
                 """)
     if Logistic_Regression == 'Step 2: Summarize Data':
         df = df.drop('Unnamed: 32', axis=1)
@@ -131,7 +130,7 @@ if selected == "Logistic Regression":
         st.text(df.describe())
         st.markdown(""
                     "")
-        st.markdown("# Yay! you successfully summarized your data. Do you observe see any interesting stats in your dataset?")
+        st.markdown("# Yay! You have successfully summarized your data. Do you see anything interesting in your dataset?")
         st.markdown(""" 
                     Let's move on to Step 3
                     """)
@@ -145,10 +144,10 @@ if selected == "Logistic Regression":
                     performing classification, it is necessary to write a code that will replace the classifiers
                     in the dataset.    
                     """)
-        if st.button('Code'):
+        if st.button('   Code'):
             st.write("df.diagnosis.replace(['M', 'B'], [1, 0], inplace = True)")
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
-        if st.button('Explanation'):
+        if st.button('   Explanation'):
             st.write("""
                     For the breast cancer dataset used in this tutorial, the goal is to classify 'Benign' (i.e., 1, 
                     the negative value) and 'Malignant' (i.e., 0, the positive value) tumors.  These are represented 
@@ -156,28 +155,28 @@ if selected == "Logistic Regression":
                     on a different dataset, determine your dataset's classifiers and its respective column name.  For 
                     best practice, place the positive value first within the brackets.
                     """)
-        st.markdown("# Convert Categorical to Numerical: next step")
+        st.markdown("# Convert Categorical to Numerical: Next step")
         st.markdown("""
                     Let's check if our Categorical values are co Numerical have been replaced with the 0 and 1 values.      
                     """)
-        if st.button('Code'):
+        if st.button('Code  '):
             st.write("df.head()")
         st.text(df.head())
-        if st.button('Explanation'):
+        if st.button('Explanation  '):
             st.write("""
                     We can see that the diagnosis column has been replaced with 0's and 1's, meaning that our 
                     replace() function was successful.
                     """)
-        st.markdown("# Convert Categorical to Numerical: next step")
+        st.markdown("# Convert Categorical to Numerical: Next step")
         st.markdown("""
                 Now, lets see the counts of your 0 and 1 values.  It is a best practice to have
                 a good representation of both.  If there is large discrepancy between classifier counts percentage wise, 
                 we have different ways to deal with class imbalance and we can work around it or we can look for a new dataset. 
                 """)
-        if st.button('Code'):
+        if st.button(' Code  '):
             st.write("df.groupby(['diagnosis']).diagnosis.count()")
         st.text(df.groupby(["diagnosis"]).diagnosis.count())
-        if st.button('Explanation'):
+        if st.button(' Explanation  '):
             st.write("""
                     We can see that there are 212 Benign (1) tumors and 357 Malignant (0) 
                     tumors in the breast cancer dataset.  This is an acceptable representation of 
@@ -185,18 +184,19 @@ if selected == "Logistic Regression":
                     Remember, if you are performing classification analysis on a different dataset, 
                     insert your classifier column name into the Part 3 code above. 
                     """)
-        st.markdown("# Convert Categorical to Numerical: next step")
+        st.markdown("# Convert Categorical to Numerical: Next step")
         st.markdown("""
                     Let's now visualize the counts of our categorical values.  When working with data, it is always
                     best to visualize if you can!  Charts, graphs, maps, etc help the viewer to understand the data in
                     a more clear and efficient way.      
                     """)
-        if st.button('Code'):
+        if st.button(' Code   '):
             st.write("sns.countplot('diagnosis', data=df)")
             st.write("plt.show()")
         sns.countplot('diagnosis', data=df)
-        st.pyplot(plt.show())
-        if st.button('Explanation'):
+        st.set_option('deprecation.showPyplotGlobalUse', False)
+        st.pyplot()
+        if st.button(' Explanation   '):
             st.write("""
                     We can see that there is a good representation of both classifiers, where 0=malignant
                     and 1=benign. 
@@ -228,29 +228,29 @@ if selected == "Logistic Regression":
                     If working with your own dataset, make sure you remove the irrelevant columns pertaining to your dataset!
                     """)
         X = df.drop(['id', 'diagnosis'], axis=1)
-        st.markdown("# Create your Test and Training Set and Create your Model: next step")
+        st.markdown("# Create your Test and Training Set and Create your Model: Next step")
         st.markdown("""
                     Let's ensure that Y only takes on the classifier column in the dataset.      
                     """)
-        if st.button('Code'):
+        if st.button('Code '):
             st.write("Y = df.iloc[:, 1]")
-        if st.button('Explanation'):
+        if st.button('Explanation '):
             st.write("""
                     Since the diagnosis column contains the classifiers, we consider this the dependent variable column.  
                     If working with your own dataset, make sure you do some research on indexes so that you can accurately 
                     store your classifier column!
                     """)
         Y = df.iloc[:, 1]
-        st.markdown("# Create your Test and Training Set and Create your Model: next step")
+        st.markdown("# Create your Test and Training Set and Create your Model: Next step")
         st.markdown("""
                     It is time to split the data into test and training sets in a standard 80% Training data and 20% Test data ratio.
                     """)
-        if st.button('Code'):
+        if st.button(' Code'):
             st.write(
                 "xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8, random_state =20221023)")
         xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8,
                                                                                 random_state=20221023)
-        if st.button('Explanation'):
+        if st.button(' Explanation'):
             st.write("""
                     This will not return any output, but will instead assign data to variables that will return output later on 
                     in the classification process. 
@@ -262,11 +262,11 @@ if selected == "Logistic Regression":
                     The random_state number sets the seed so that you calculate the same accuracy each time.  Any number can be used, 
                     but many people prefer to use today's date.
                     """)
-        st.markdown("# Create your Test and Training Set and Create your Model: next step")
+        st.markdown("# Create your Test and Training Set and Create your Model: Next step")
         st.markdown("""
                     Create a model that performs logistic regression.      
                     """)
-        if st.button('Code'):
+        if st.button(' Code '):
             st.write("regressionModel = LogisticRegression(solver='newton-cg')")
         regressionModel = LogisticRegression(solver='newton-cg')
         st.markdown("# Create your Test and Training Set and Create your Model: next step")
@@ -275,7 +275,7 @@ if selected == "Logistic Regression":
                     the data and "learn" from it.  This step will not return any output, but will be used later on 
                     in the classification process.       
                     """)
-        if st.button('Code'):
+        if st.button('  Code'):
             st.write("regressionModel.fit(xTrain, yTrain)")
         regressionModel.fit(xTrain, yTrain)
         st.markdown("# Create your Test and Training Set and Create your Model: next step")
@@ -283,17 +283,17 @@ if selected == "Logistic Regression":
                     Now that we have created our model and trained it, Part 6 will use our testing dataset to test the model.  
                     This step will not return any output, but will be used later on in the classification process.
                     """)
-        if st.button('Code'):
+        if st.button('Code  '):
             st.write("predRegression =regressionModel.predict(xTest)")
         predRegression = regressionModel.predict(xTest)
         st.markdown(""
                     "")
         st.markdown("# Yay 🎉")
         st.markdown(""" 
-                    You have successfully learnt to split your dataset into test and training and create a logistic regression model to perform classification!
+                    You have successfully learned to split your dataset into test and training and create a logistic regression model to perform classification!
                     Let's proceed to Step 5
                     """)
-    if Logistic_Regression == 'Step 5: Check your Model Accuracy':
+    if Logistic_Regression == 'Step 5: Run your model and check your Model Accuracy':
         df = df.drop('Unnamed: 32', axis=1)
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
         X = df.drop(['id', 'diagnosis'], axis=1)
@@ -303,7 +303,7 @@ if selected == "Logistic Regression":
         regressionModel = LogisticRegression(solver='newton-cg')
         regressionModel.fit(xTrain, yTrain)
         predRegression = regressionModel.predict(xTest)
-        st.markdown("# Check your Model Accuracy: next step")
+        st.markdown("# Check your Model Accuracy")
         st.markdown("""
                     Let's see the actual and predicted classifiers in array form. Can you spot the 
                     differences between the actual and predicted set?      
@@ -315,22 +315,22 @@ if selected == "Logistic Regression":
         st.text(yTest.values)
         st.text("\nPredicted breast cancer : ")
         st.text(predRegression)
-        st.markdown("# Check your Model Accuracy: next step")
+        st.markdown("# Check your Model Accuracy: Next step")
         st.markdown("""
                     Now, calculate the accuracy score.  As it may sound, the accuracy score declares how 
                     accurately the model classifies the classifiers.     
                     """)
-        if st.button('Code'):
+        if st.button('Code '):
             st.write("accuracy_score(yTest, predRegression) * 100")
         st.text("Accuracy Score: ")
         st.text(accuracy_score(yTest, predRegression) * 100)
-        if st.button("Explanation"):
+        if st.button("Explanation "):
             st.write("""
                     Accuracy score is calculated by dividing the number of correct predictions by the total prediction number.
                     """)
         st.markdown("# Yay 🎉")
         st.markdown(""" 
-                    You learnt to check your model accuracy.
+                    You have learned to check your model's accuracy.
                     You are ready to move on to Step 6
                     """)
     if Logistic_Regression == 'Step 6: Prediction Results':
@@ -349,12 +349,12 @@ if selected == "Logistic Regression":
             st.write(
                 """sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predRegression), annot=True).set(title='Logistic Regression')""")
             st.write("""plt.show()""")
-        plt.figure(figsize=(16, 14))
+        fig = plt.figure(figsize=(16, 14)),
         plt.subplot(3, 3, 1)
         sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predRegression), annot=True).set(
             title='Logistic Regression')
         st.set_option('deprecation.showPyplotGlobalUse', False)
-        st.pyplot(plt.show())
+        st.pyplot(fig)
         predVals = pd.DataFrame(data={'truth': yTest, 'regression': predRegression})
         if st.button("Explanation"):
             st.write("""
@@ -371,8 +371,8 @@ if selected == "Logistic Regression":
                     """)
         st.markdown("# Yay 🎉")
         st.markdown(""" 
-                    You learnt to check your model prediction results!
-                    You are now a Logistic Regression classification Pro! Check out our DIY section to play around your own dataset.
+                    You learned to check your model prediction results!
+                    You are now a Logistic Regression classification Pro! Check out our DIY section to play around with your own dataset.
                     """)
 
 if selected == "KNN":
@@ -403,14 +403,14 @@ if selected == "KNN":
                             for your dataset.  Instead, just drop the nulls in each column.  This can be done with a df.dropna()
                             command. 
                             """)
-        st.markdown("# Null Values: next step")
+        st.markdown("# Null Values: Next step")
         st.markdown("""
                             Now, lets delete the null values in our dataset.
                             """)
-        if st.button('Code'):
+        if st.button('Code '):
             st.write("df.drop('Unnamed: 32', axis=1)")
         df = df.drop('Unnamed: 32', axis=1)
-        if st.button('Explanation'):
+        if st.button('Explanation '):
             st.write("Once we perform the df.drop function on our identified null values, "
                      "we have removed all nulls from our dataset.  If you have a different dataset, change "
                      "the column name to reflect your dataset.  If you are not dropping an entire column but just several rows, "
@@ -464,10 +464,10 @@ if selected == "KNN":
         st.markdown("""
                     Lets check that your classifiers have been replaced with the 0 and 1 values.      
                     """)
-        if st.button('Code'):
+        if st.button('Code '):
             st.write("df.head()")
         st.text(df.head())
-        if st.button('Explanation'):
+        if st.button('Explanation '):
             st.write("""
                     We can see that the diagnosis column has been replaced with 0's and 1's, meaning that our 
                     replace() function was successful.
@@ -478,10 +478,10 @@ if selected == "KNN":
                     a good representation of both classifiers.  If there is large discrepancy between classifier counts percentage wise, 
                     perhaps look for a different dataset.      
                     """)
-        if st.button('Code'):
+        if st.button(' Code'):
             st.write("df.groupby(['diagnosis']).diagnosis.count()")
         st.text(df.groupby(["diagnosis"]).diagnosis.count())
-        if st.button('Explanation'):
+        if st.button(' Explanation'):
             st.write("""
                     We can see that there are 212 Benign (1) tumors and 357 Malignant (0) 
                     tumors in the breast cancer dataset.  This is an acceptable representation of 
@@ -495,12 +495,13 @@ if selected == "KNN":
                     best to visualize if you can!  Charts, graphs, maps, etc help the viewer to understand the data in
                     a more clear and efficient way.      
                     """)
-        if st.button('Code'):
+        if st.button('Code  '):
             st.write("sns.countplot('diagnosis', data=df)")
             st.write("plt.show()")
         sns.countplot('diagnosis', data=df)
-        st.pyplot(plt.show())
-        if st.button('Explanation'):
+        st.set_option('deprecation.showPyplotGlobalUse', False)
+        st.pyplot()
+        if st.button('Explanation  '):
             st.write("""
                     We can see that there is a good representation of both classifiers, where 0=malignant
                     and 1=benign. 
@@ -514,7 +515,7 @@ if selected == "KNN":
                     You have completed KNN, Replace Classifier!
                     You are ready to move on to Step 4
                     """)
-    if KNN == 'Step 4: Create your Test and Training Set':
+    if KNN == 'Step 4: Create your Test and Training Sets':
         df.isnull().any()
         df = df.drop('Unnamed: 32', axis=1)
         df.diagnosis.replace(["M", "B"], [1, 0], inplace=True)
@@ -536,9 +537,9 @@ if selected == "KNN":
         st.markdown("""
                     Let's ensure that Y only takes on the classifier column in the dataset.      
                     """)
-        if st.button('Code'):
+        if st.button('Code '):
             st.write("Y = df.iloc[:, 1]")
-        if st.button('Explanation'):
+        if st.button('Explanation '):
             st.write("""
                     Since the diagnosis column contains the classifiers, we consider this the dependent variable column.  
                     If working with your own dataset, make sure you do some research on indexes so that you can accurately 
@@ -549,12 +550,12 @@ if selected == "KNN":
         st.markdown("""
                     Let's splits the data into test and training sets using the X and Y variables we created previously.       
                     """)
-        if st.button('Code'):
+        if st.button(' Code'):
             st.write(
                 "xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8, random_state =20221023)")
         xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8,
                                                                                 random_state=20221023)
-        if st.button('Explanation'):
+        if st.button(' Explanation'):
             st.write("""
                    Part 3 will not return any output, but will instead assign data to variables that will return output later on 
                    in the classification process. 
@@ -570,23 +571,23 @@ if selected == "KNN":
         st.markdown("""
                     Creates a model that performs KNN Classification.      
                     """)
-        if st.button('Code'):
+        if st.button('  Code'):
             st.write("KNNModel = KNeighborsClassifier(n_neighbors=5,leaf_size=1, weights='uniform')")
         KNNModel = KNeighborsClassifier(n_neighbors=5, leaf_size=1, weights='uniform')
-        if st.button('Explanation'):
+        if st.button('  Explanation'):
             st.write("""
                    The n_neighbors parameter declares the number of neighbors.  5 is the default.  Do some research to find
                    the best option for your dataset.  
                    Uniform weights means that all points in each neighborhood are weighed equally.  Do some research to find the best
                    option for your dataset. 
                    """)
-        st.markdown("# Create your Test and Training Set: next step")
+        st.markdown("# Create your Test and Training Set: Next step")
         st.markdown("""
                     Now, lets fits the KNN model to the training set.  This allows the model to "study"
                     the data and "learn" from it.  This step will not return any output, but will be used later on 
                     in the classification process.       
                     """)
-        if st.button('Code'):
+        if st.button('Code   '):
             st.write("KNNModel.fit(xTrain,yTrain)")
         KNNModel.fit(xTrain, yTrain)
         st.markdown("# Create your Test and Training Set: next step")
@@ -594,7 +595,7 @@ if selected == "KNN":
                     Now that we have created our model and trained it, Part 6 will use our testing dataset to test the model.  
                     This step will not return any output, but will be used later on in the classification process.
                     """)
-        if st.button('Code'):
+        if st.button('Code    '):
             st.write("predKNN =KNNModel.predict(xTest)")
         predKNN = KNNModel.predict(xTest)
         st.markdown(""
@@ -631,7 +632,7 @@ if selected == "KNN":
                     This code allows you to calculate the accuracy score.  As it may sound, the accuracy score declares how 
                     accurately the model classifies the classifiers.     
                     """)
-        if st.button('Code'):
+        if st.button(' Code'):
             st.write("accuracy_score(yTest, predKNN) * 100")
         st.text("Accuracy Score: ")
         st.text(accuracy_score(yTest, predKNN) * 100)
@@ -663,7 +664,7 @@ if selected == "KNN":
         plt.subplot(3, 3, 2)
         sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predKNN), annot=True).set(title='KNN')
         st.set_option('deprecation.showPyplotGlobalUse', False)
-        st.pyplot(plt.show())
+        st.pyplot()
         if st.button("Explanation"):
             st.write("""
                     The top left value represents the true positive classifications.  This means you predicted positive and it's 
@@ -715,10 +716,10 @@ if selected == "Random Forest":
         st.markdown("""
                             Part 2 is to delete the null values in our dataset.
                             """)
-        if st.button('Code'):
+        if st.button('Code '):
             st.write("df.drop('Unnamed: 32', axis=1)")
         df = df.drop('Unnamed: 32', axis=1)
-        if st.button('Explanation'):
+        if st.button('Explanation '):
             st.write("Once we perform the df.drop function on our identified null values, "
                      "we have removed all nulls from our dataset.  If you have a different dataset, change "
                      "the column name to reflect your dataset.  If you are not dropping an entire column but just several rows, "
@@ -772,10 +773,10 @@ if selected == "Random Forest":
         st.markdown("""
                     Part 2 is for you to check that your classifiers have been replaced with the 0 and 1 values.      
                     """)
-        if st.button('Code'):
+        if st.button('Code '):
             st.write("df.head()")
         st.text(df.head())
-        if st.button('Explanation'):
+        if st.button('Explanation '):
             st.write("""
                     We can see that the diagnosis column has been replaced with 0's and 1's, meaning that our 
                     replace() function was successful.
@@ -786,10 +787,10 @@ if selected == "Random Forest":
                     a good representation of both classifiers.  If there is large discrepancy between classifier counts percentage wise, 
                     perhaps look for a different dataset.      
                     """)
-        if st.button('Code'):
+        if st.button(' Code'):
             st.write("df.groupby(['diagnosis']).diagnosis.count()")
         st.text(df.groupby(["diagnosis"]).diagnosis.count())
-        if st.button('Explanation'):
+        if st.button(' Explanation'):
             st.write("""
                     We can see that there are 212 Benign (1) tumors and 357 Malignant (0) 
                     tumors in the breast cancer dataset.  This is an acceptable representation of 
@@ -803,12 +804,13 @@ if selected == "Random Forest":
                     best to visualize if you can!  Charts, graphs, maps, etc help the viewer to understand the data in
                     a more clear and efficient way.      
                     """)
-        if st.button('Code'):
+        if st.button('Code  '):
             st.write("sns.countplot('diagnosis', data=df)")
             st.write("plt.show()")
         sns.countplot('diagnosis', data=df)
-        st.pyplot(plt.show())
-        if st.button('Explanation'):
+        st.set_option('deprecation.showPyplotGlobalUse', False)
+        st.pyplot()
+        if st.button('Explanation  '):
             st.write("""
                     We can see that there is a good representation of both classifiers, where 0=malignant
                     and 1=benign. 
@@ -844,9 +846,9 @@ if selected == "Random Forest":
         st.markdown("""
                     Part 2 ensures that Y only takes on the classifier column in the dataset.      
                     """)
-        if st.button('Code'):
+        if st.button('Code '):
             st.write("Y = df.iloc[:, 1]")
-        if st.button('Explanation'):
+        if st.button('Explanation '):
             st.write("""
                     Since the diagnosis column contains the classifiers, we consider this the dependent variable column.  
                     If working with your own dataset, make sure you do some research on indexes so that you can accurately 
@@ -857,12 +859,12 @@ if selected == "Random Forest":
         st.markdown("""
                     Code splits the data into test and training sets using the X and Y variables we created previously.       
                     """)
-        if st.button('Code'):
+        if st.button(' Code'):
             st.write(
                 "xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8, random_state =20221023)")
         xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8,
                                                                                 random_state=20221023)
-        if st.button('Explanation'):
+        if st.button(' Explanation'):
             st.write("""
                    This will not return any output, but will instead assign data to variables that will return output later on 
                     in the classification process. 
@@ -878,7 +880,7 @@ if selected == "Random Forest":
         st.markdown("""
                     This creates a model that performs Random Forest Classification.      
                     """)
-        if st.button('Code'):
+        if st.button('Code   '):
             st.write("randomFModel = RandomForestClassifier()")
         randomFModel = RandomForestClassifier()
         st.markdown("# Create your Test and Training Sets")
@@ -887,7 +889,7 @@ if selected == "Random Forest":
                     the data and "learn" from it.  This step will not return any output, but will be used later on 
                     in the classification process.       
                     """)
-        if st.button('Code'):
+        if st.button('  Code '):
             st.write("randomFModel.fit(xTrain,yTrain)")
         randomFModel.fit(xTrain, yTrain)
         st.markdown("# Create your Test and Training Sets")
@@ -895,7 +897,7 @@ if selected == "Random Forest":
                     Now that we have created our model and trained it, Part 6 will use our testing dataset to test the model.  
                     This step will not return any output, but will be used later on in the classification process.
                     """)
-        if st.button('Code'):
+        if st.button('Code     '):
             st.write("predRandomF =randomFModel.predict(xTest)")
         predRandomF = randomFModel.predict(xTest)
         st.markdown(""
@@ -933,11 +935,11 @@ if selected == "Random Forest":
                     This allows you to calculate the accuracy score.  As it may sound, the accuracy score declares how 
                     accurately the model classifies the classifiers.     
                     """)
-        if st.button('Code'):
+        if st.button('Code '):
             st.write("accuracy_score(yTest, predRandomF) * 100")
         st.text("Accuracy Score: ")
         st.text(accuracy_score(yTest, predRandomF) * 100)
-        if st.button("Explanation"):
+        if st.button("Explanation  "):
             st.write("""
                     Accuracy score is calculated by dividing the number of correct predictions by the total prediction number.
                     """)
@@ -966,8 +968,8 @@ if selected == "Random Forest":
         plt.subplot(3, 3, 3)
         sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predRandomF), annot=True).set(title='Random Forest')
         st.set_option('deprecation.showPyplotGlobalUse', False)
-        st.pyplot(plt.show())
-        if st.button("Explanation"):
+        st.pyplot()
+        if st.button("Explanation  "):
             st.write("""
                     The top left value represents the true positive classifications.  This means you predicted positive and it's 
                     true.  In the case of our dataset, you predicted that a tumor is malignant and it actually is. 
@@ -1018,10 +1020,10 @@ if selected == "Naive Bayes":
         st.markdown("""
                             Part 2 is to delete the null values in our dataset.
                             """)
-        if st.button('Code'):
+        if st.button('Code '):
             st.write("df.drop('Unnamed: 32', axis=1)")
         df = df.drop('Unnamed: 32', axis=1)
-        if st.button('Explanation'):
+        if st.button('Explanation '):
             st.write("Once we perform the df.drop function on our identified null values, "
                      "we have removed all nulls from our dataset.  If you have a different dataset, change "
                      "the column name to reflect your dataset.  If you are not dropping an entire column but just several rows, "
@@ -1075,10 +1077,10 @@ if selected == "Naive Bayes":
         st.markdown("""
                     This is for you to check that your classifiers have been replaced with the 0 and 1 values.      
                     """)
-        if st.button('Code'):
+        if st.button('Code '):
             st.write("df.head()")
         st.text(df.head())
-        if st.button('Explanation'):
+        if st.button('Explanation '):
             st.write("""
                     We can see that the diagnosis column has been replaced with 0's and 1's, meaning that our 
                     replace() function was successful.
@@ -1089,10 +1091,10 @@ if selected == "Naive Bayes":
                     a good representation of both classifiers.  If there is large discrepancy between classifier counts percentage wise, 
                     perhaps look for a different dataset.      
                     """)
-        if st.button('Code'):
+        if st.button(' Code'):
             st.write("df.groupby(['diagnosis']).diagnosis.count()")
         st.text(df.groupby(["diagnosis"]).diagnosis.count())
-        if st.button('Explanation'):
+        if st.button(' Explanation'):
             st.write("""
                     We can see that there are 212 Benign (1) tumors and 357 Malignant (0) 
                     tumors in the breast cancer dataset.  This is an acceptable representation of 
@@ -1106,12 +1108,13 @@ if selected == "Naive Bayes":
                     best to visualize if you can!  Charts, graphs, maps, etc help the viewer to understand the data in
                     a more clear and efficient way.      
                     """)
-        if st.button('Code'):
+        if st.button('Code  '):
             st.write("sns.countplot('diagnosis', data=df)")
             st.write("plt.show()")
         sns.countplot('diagnosis', data=df)
-        st.pyplot(plt.show())
-        if st.button('Explanation'):
+        st.set_option('deprecation.showPyplotGlobalUse', False)
+        st.pyplot()
+        if st.button('Explanation  '):
             st.write("""
                     We can see that there is a good representation of both classifiers, where 0=malignant
                     and 1=benign. 
@@ -1147,9 +1150,9 @@ if selected == "Naive Bayes":
         st.markdown("""
                     This ensures that Y only takes on the classifier column in the dataset.      
                     """)
-        if st.button('Code'):
+        if st.button('Code '):
             st.write("Y = df.iloc[:, 1]")
-        if st.button('Explanation'):
+        if st.button('Explanation '):
             st.write("""
                     Since the diagnosis column contains the classifiers, we consider this the dependent variable column.  
                     If working with your own dataset, make sure you do some research on indexes so that you can accurately 
@@ -1160,12 +1163,12 @@ if selected == "Naive Bayes":
         st.markdown("""
                     This splits the data into test and training sets using the X and Y variables we created previously.       
                     """)
-        if st.button('Code'):
+        if st.button(' Code'):
             st.write(
                 "xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8, random_state =20221023)")
         xTrain, xTest, yTrain, yTest = sklearn.model_selection.train_test_split(X, Y, train_size=0.8,
                                                                                 random_state=20221023)
-        if st.button('Explanation'):
+        if st.button(' Explanation'):
             st.write("""
                     This will not return any output, but will instead assign data to variables that will return output later on 
                     in the classification process. 
@@ -1181,7 +1184,7 @@ if selected == "Naive Bayes":
         st.markdown("""
                     This creates a model that performs Naive Bayes Classification.      
                     """)
-        if st.button('Code'):
+        if st.button(' Code '):
             st.write("NB = GaussianNB()")
         NB = GaussianNB()
         st.markdown("# Test and Training Data Part 5")
@@ -1190,7 +1193,7 @@ if selected == "Naive Bayes":
                     the data and "learn" from it.  This step will not return any output, but will be used later on 
                     in the classification process.       
                     """)
-        if st.button('Click for Part 5 Code'):
+        if st.button('  Code'):
             st.write("NB.fit(xTrain,yTrain)")
         NB.fit(xTrain, yTrain)
         st.markdown("# Create your Test and Training Sets")
@@ -1235,11 +1238,11 @@ if selected == "Naive Bayes":
                     this allows you to calculate the accuracy score.  As it may sound, the accuracy score declares how 
                     accurately the model classifies the classifiers.     
                     """)
-        if st.button('Code'):
+        if st.button('Code    '):
             st.write("accuracy_score(yTest, predNB) * 100")
         st.text("Accuracy Score: ")
         st.text(accuracy_score(yTest, predNB) * 100)
-        if st.button("Explanation"):
+        if st.button("Explanation "):
             st.write("""
                     Accuracy score is calculated by dividing the number of correct predictions by the total prediction number.
                     """)
@@ -1275,20 +1278,17 @@ if selected == "Naive Bayes":
         plt.subplot(3, 3, 3)
         sns.heatmap(sklearn.metrics.confusion_matrix(yTest, predNB), annot=True).set(title='Naive Bayes')
         st.set_option('deprecation.showPyplotGlobalUse', False)
-        st.pyplot(plt.show())
+        st.pyplot()
         if st.button("Explanation"):
             st.write("""
                     The top left value represents the true positive classifications.  This means you predicted positive and it's 
                     true.  In the case of our dataset, you predicted that a tumor is malignant and it actually is. 
-
                     The top right value represents the false positive classifications.  This is also known as a Type I error.
                     This means you predicted positive and it's false. In the case of our dataset, you predicted that a tumor is malignant
                     but it is actually benign.
-
                     The bottom left value represents the false negative classifications.  This is also known as a Type II error. 
                     This means you predicted negative and it's false.  In the case of our dataset, you predicted
                     that a tumor is benign but it is actually malignant.  
-
                     The bottom right value represents the true negative classifications.This means you predicted negative
                     and it's true.  In the case of our dataset, you predicted that a tumor is benign and it is indeed benign.   
                     """)
@@ -1304,7 +1304,7 @@ if selected == "About":
                 """)
     st.markdown("""
                 Classification Central was created as part of a Comp-Sci 5530 project for UMKC and Hack-a-Roo.  The goal of the project was to create
-                a user interface for naive data scientists learning how to classify data.  By providing the code, the output of the code, and explanations of each 
+                a user interface for beginner data scientists learning how to classify data.  By providing the code, the output of the code, and explanations of each 
                 of the steps and its corresponding output within the 4 different classification techniques, we hope we have improved the ability of beginner data scientists 
                 to understand classification.  As a result of this project, the developers also had the opportunity to learn a new tool: Streamlit, as well as refresh their memory 
                 in popular classification techniques.  It is always helpful in industry to be able to have clear knowledge of data science concepts, and as a result of this project, the
@@ -1359,13 +1359,10 @@ if selected == "Home":
         4) Implement Test and Training Sets
         5) Determine the Accuracy Score
         6) Output a Confusion Matrix
-
         By going through each of these steps, you will see that it is quite simple to classify your data in many different ways.  Our tutorial is 
         sufficient for any dataset with a binary classifier (i.e., a dataset with two class labels.  This may include diseased vs not diseased, spam vs 
         not spam, etc.).  After this tutorial, you will leave Classification Central a classification pro, and be able to impress people in industry with your ability to classify
         data via 4 different techniques.  
-
-
         We hope you enjoy Classification Central, and that we have helped make your data science learning fun and easy!
         """)
 
@@ -1374,7 +1371,6 @@ if selected == "Home":
                 DANA is Classification Central's Bonus Section that allows for you to upload your own CSV file.  Once
                 your file is uploaded, you can remove nulls from your dataset, summarize your data, and perform many 
                 different visualizations of your data for optimal understanding. 
-
                 DANA is fully interactive, meaning that you can visualize based on any column name in your dataset.
                 """)
 
@@ -1664,8 +1660,3 @@ if selected == "Visualizations":
                         for i in high_cardi_columns:
                             fig = px.box(df_1, y=target_column, color=i)
                             st.plotly_chart(fig, use_container_width=True)
-
-
-
-
-
