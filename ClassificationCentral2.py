@@ -184,25 +184,6 @@ if selected == "Logistic Regression":
                     Remember, if you are performing classification analysis on a different dataset, 
                     insert your classifier column name into the Part 3 code above. 
                     """)
-        st.markdown("# Convert Categorical to Numerical: Next step")
-        st.markdown("""
-                    Let's now visualize the counts of our categorical values.  When working with data, it is always
-                    best to visualize if you can!  Charts, graphs, maps, etc help the viewer to understand the data in
-                    a more clear and efficient way.      
-                    """)
-        if st.button(' Code   '):
-            st.write("sns.countplot('diagnosis', data=df)")
-            st.write("plt.show()")
-        sns.countplot('diagnosis', data=df)
-        st.set_option('deprecation.showPyplotGlobalUse', False)
-        st.pyplot()
-        if st.button(' Explanation   '):
-            st.write("""
-                    We can see that there is a good representation of both classifiers, where 0=malignant
-                    and 1=benign. 
-                    Remember, if you are performing classification analysis on a different dataset, 
-                    insert your classifier column name into the above code. 
-                    """)
         st.markdown(""
                     "")
         st.markdown("# Yay 🎉")
@@ -483,25 +464,6 @@ if selected == "KNN":
                     Remember, if you are performing classification analysis on a different dataset, 
                     insert your classifier column name into the Part 3 code above. 
                     """)
-        st.markdown("# Convert Categorical to Numerical")
-        st.markdown("""
-                    Here, let us visualize the counts of your classifiers.  When working with data, it is always
-                    best to visualize if you can!  Charts, graphs, maps, etc help the viewer to understand the data in
-                    a more clear and efficient way.      
-                    """)
-        if st.button('Code  '):
-            st.write("sns.countplot('diagnosis', data=df)")
-            st.write("plt.show()")
-        sns.countplot('diagnosis', data=df)
-        st.set_option('deprecation.showPyplotGlobalUse', False)
-        st.pyplot()
-        if st.button('Explanation  '):
-            st.write("""
-                    We can see that there is a good representation of both classifiers, where 0=malignant
-                    and 1=benign. 
-                    Remember, if you are performing classification analysis on a different dataset, 
-                    insert your classifier column name into the Part 4 code above. 
-                    """)
         st.markdown(""
                     "")
         st.markdown("# Yay🎉")
@@ -609,7 +571,7 @@ if selected == "KNN":
         KNNModel = KNeighborsClassifier(n_neighbors=5, leaf_size=1, weights='uniform')
         KNNModel.fit(xTrain, yTrain)
         predKNN = KNNModel.predict(xTest)
-        st.markdown("# Run your model and check your Model Accuracy: next step")
+        st.markdown("# Run your model and check your Model Accuracy")
         st.markdown("""
                      See the actual and predicted classifiers in array form.  Can you spot the 
                     differences between the actual and predicted set?      
@@ -621,7 +583,7 @@ if selected == "KNN":
         st.text(yTest.values)
         st.text("\nPredicted breast cancer : ")
         st.text(predKNN)
-        st.markdown("#Run your model and check your Model Accuracy: next step")
+        st.markdown("# Run your model and check your Model Accuracy: Next step")
         st.markdown("""
                     This code allows you to calculate the accuracy score.  As it may sound, the accuracy score declares how 
                     accurately the model classifies the classifiers.     
@@ -788,25 +750,6 @@ if selected == "Random Forest":
                     Remember, if you are performing classification analysis on a different dataset, 
                     insert your classifier column name into the Part 3 code above. 
                     """)
-        st.markdown("# Convert Categorical to Numerical values")
-        st.markdown("""
-                    Part 4 is for you visualize the counts of your classifiers.  When working with data, it is always
-                    best to visualize if you can!  Charts, graphs, maps, etc help the viewer to understand the data in
-                    a more clear and efficient way.      
-                    """)
-        if st.button('Code  '):
-            st.write("sns.countplot('diagnosis', data=df)")
-            st.write("plt.show()")
-        sns.countplot('diagnosis', data=df)
-        st.set_option('deprecation.showPyplotGlobalUse', False)
-        st.pyplot()
-        if st.button('Explanation  '):
-            st.write("""
-                    We can see that there is a good representation of both classifiers, where 0=malignant
-                    and 1=benign. 
-                    Remember, if you are performing classification analysis on a different dataset, 
-                    insert your classifier column name into the code above. 
-                    """)
         st.markdown(""
                     "")
         st.markdown("# Yay 🎉!")
@@ -832,7 +775,7 @@ if selected == "Random Forest":
                     If working with your own dataset, make sure you remove the irrelevant columns pertaining to your dataset!
                     """)
         X = df.drop(['id', 'diagnosis'], axis=1)
-        st.markdown("# Create your Test and Training Sets")
+        st.markdown("Create your Test and Training Sets")
         st.markdown("""
                     Part 2 ensures that Y only takes on the classifier column in the dataset.      
                     """)
@@ -1089,25 +1032,6 @@ if selected == "Naive Bayes":
                     Remember, if you are performing classification analysis on a different dataset, 
                     insert your classifier column name into the Part 3 code above. 
                     """)
-        st.markdown("# Convert Categorical to Numerical values")
-        st.markdown("""
-                    This is for you visualize the counts of your classifiers.  When working with data, it is always
-                    best to visualize if you can!  Charts, graphs, maps, etc help the viewer to understand the data in
-                    a more clear and efficient way.      
-                    """)
-        if st.button('Code  '):
-            st.write("sns.countplot('diagnosis', data=df)")
-            st.write("plt.show()")
-        sns.countplot('diagnosis', data=df)
-        st.set_option('deprecation.showPyplotGlobalUse', False)
-        st.pyplot()
-        if st.button('Explanation  '):
-            st.write("""
-                    We can see that there is a good representation of both classifiers, where 0=malignant
-                    and 1=benign. 
-                    Remember, if you are performing classification analysis on a different dataset, 
-                    insert your classifier column name into the Part 4 code above. 
-                    """)
         st.markdown(""
                     "")
         st.markdown("# Yay 🎉!")
@@ -1188,7 +1112,7 @@ if selected == "Naive Bayes":
                     Now that we have created our model and trained it, Part 6 will use our testing dataset to test the model.  
                     This step will not return any output, but will be used later on in the classification process.
                     """)
-        if st.button('Code'):
+        if st.button('Code       '):
             st.write("predNB =NB.predict(xTest)")
         predNB = NB.predict(xTest)
         st.markdown(""
@@ -1210,7 +1134,7 @@ if selected == "Naive Bayes":
         predNB = NB.predict(xTest)
         st.markdown("# Run your model and check your Model Accuracy")
         st.markdown("""
-                    this allows you to see the actual and predicted classifiers in array form.  Can you spot the 
+                    This allows you to see the actual and predicted classifiers in array form.  Can you spot the 
                     differences between the actual and predicted set?      
                     """)
         if st.button('Code'):
@@ -1220,9 +1144,9 @@ if selected == "Naive Bayes":
         st.text(yTest.values)
         st.text("\nPredicted breast cancer : ")
         st.text(predNB)
-        st.markdown("#Run your model and check your Model Accuracy")
+        st.markdown("# Run your model and check your Model Accuracy")
         st.markdown("""
-                    this allows you to calculate the accuracy score.  As it may sound, the accuracy score declares how 
+                    This allows you to calculate the accuracy score.  As it may sound, the accuracy score declares how 
                     accurately the model classifies the classifiers.     
                     """)
         if st.button('Code    '):
