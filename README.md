@@ -6,8 +6,8 @@ Name: Anil Kumar Kochera
 Email: akkw32@umsystem.edu
 ```
 ```
-Name: 
-Email: 
+Name: Daniel Rider
+Email: riderDanielJ@gmail.com
 ```
 ```
 Name: 
