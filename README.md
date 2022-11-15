@@ -10,8 +10,8 @@ Name: Daniel Rider
 Email: riderDanielJ@gmail.com
 ```
 ```
-Name: 
-Email: 
+Name: Ally Ryan
+Email: aerc4d@umsystem.edu
 ```
 ```
 Name: 
