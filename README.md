@@ -44,7 +44,7 @@ Video Link:
 <h2> Summary </h2>
 <br>
 
-<p> Welcome to Classification Central, where any new Machine Learning Enthusiast can learn about the basic algorithms. Explore our options and learn step by step about classification and regression solutions to different datasets.</p>
+<p> Welcome to Classification Central, where any new Machine Learning Enthusiast can learn about the basic algorithms. Explore our options and learn step by step about classification and regression solutions to different datasets. To run the project, download the ClassificationCentral2.py and run it with the command, "streamlit run ClassificationCentral2.py". This should launch the streamlit app on your localhost and give you a browser link. For the video description of the website, please follow the link: </p>
 
 
 
