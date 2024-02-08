@@ -14,8 +14,8 @@ Name: Ally Ryan
 Email: aerc4d@umsystem.edu
 ```
 ```
-Name: 
-Email: 
+Name: Nabila Hashim
+Email: nntdc@umsystem.edu
 ```
 ---
 ```
